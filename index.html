@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>面談対策トレーナー</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="config.js"></script>
@@ -17,6 +17,7 @@
 }
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
+@supports (height:100dvh){body{height:100dvh}}
 body{display:flex;flex-direction:column;overflow:hidden;font-family:'Noto Sans JP','Hiragino Sans','Meiryo',system-ui,sans-serif;color:var(--ink);background:var(--ground);-webkit-font-smoothing:antialiased}
 button,select{font-family:inherit}
 button{cursor:pointer}
@@ -99,7 +100,9 @@ button:focus-visible{outline:3px solid #9DBDF0;outline-offset:2px}
 .opt:disabled{opacity:.6;cursor:not-allowed;background:#F4F6F9}
 .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .seg{display:flex;gap:6px;padding:4px;background:#EEF2F7;border-radius:12px}
-.seg button{flex:1;min-height:42px;border-radius:9px;border:0;background:transparent;font-size:14px;font-weight:700;color:#3D4856;transition:background .15s,color .15s,box-shadow .15s}
+.seg button{flex:1;min-width:0;min-height:54px;border-radius:9px;border:0;background:transparent;font-size:13px;font-weight:700;color:#3D4856;padding:4px 2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;line-height:1.25;transition:background .15s,color .15s,box-shadow .15s}
+.seg button b{font-size:12px;font-weight:500;color:var(--muted)}
+.seg button.on b{color:var(--brand)}
 .seg button.on{background:#fff;color:var(--brand-d);box-shadow:0 1px 4px rgba(16,24,40,.14)}
 .chk{display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.6}
 .chk input{width:18px;height:18px;margin-top:3px;flex:none;accent-color:var(--brand)}
@@ -160,7 +163,7 @@ button:focus-visible{outline:3px solid #9DBDF0;outline-offset:2px}
 .ring .rt b{font-size:32px;line-height:1;color:var(--ink)}
 .ring .rt span{font-size:11px;color:var(--muted)}
 .bandbadge{display:inline-block;font-size:12px;font-weight:700;padding:3px 12px;border-radius:999px}
-.radar{flex:0 0 230px;max-width:100%}
+.radar{flex:0 1 310px;max-width:100%}
 .axes{flex:1;min-width:170px;display:flex;flex-direction:column;gap:11px}
 .axis{display:flex;flex-direction:column;gap:5px;font-size:13px}
 .axis>div:first-child{display:flex;justify-content:space-between;align-items:center}
@@ -216,7 +219,60 @@ dialog[open]{animation:pop .25s cubic-bezier(.2,.8,.2,1)}
 #toast{position:fixed;left:50%;bottom:92px;transform:translate(-50%,20px);background:#162033;color:#fff;font-size:13px;font-weight:700;padding:10px 18px;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:30}
 #toast.show{opacity:1;transform:translate(-50%,0)}
 
-@media (max-width:860px){.g2,.opts-body,.login,.dcols{grid-template-columns:1fr}body{overflow:auto}#main{overflow:visible}#bar .in{flex-wrap:wrap}}
+.bsec,.bpri{display:flex;gap:10px;align-items:center}
+@media (max-width:900px){
+  .g2,.opts-body,.login,.dcols{grid-template-columns:1fr}
+  .col>.card.fill{flex:none}
+}
+@media (max-width:640px){
+  .top{padding:8px 12px;gap:6px;min-height:0}
+  .brand{gap:8px}.brand .mark{width:28px;height:28px;border-radius:8px}.brand .mark svg{width:16px;height:16px}
+  .brand h1{font-size:15px}.brand small{display:none}
+  .steps{width:100%;justify-content:space-between;gap:4px;padding:2px 0}
+  .step{font-size:12px;padding:4px 10px 4px 4px;gap:6px}
+  .step:not(.on){padding:4px}
+  .step:not(.on) .sl{display:none}
+  #sbar{padding:5px 12px}
+  #sbar .in{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;min-height:26px}
+  #sbar .in::-webkit-scrollbar{display:none}
+  .sb-l{display:none}
+  .sb-r{flex-wrap:nowrap;white-space:nowrap}
+  #main{padding:12px 12px 16px}
+  .card{padding:16px;border-radius:14px;gap:10px}
+  .qcard{padding:18px}
+  .qtext{font-size:19px}
+  textarea,input[type=text],input[type=password],select{font-size:16px}
+  .btn{min-height:50px}
+  .btn.min{min-height:44px}
+  .drop{flex-direction:column;align-items:stretch}
+  .drop .btn{width:100%}
+  .ring{width:96px;height:96px}.ring .rt b{font-size:26px}
+  .evalbox{justify-content:center}
+  .radar{flex:1 1 220px}
+  .axes{min-width:100%}
+  .score-line{flex-wrap:wrap}
+  .prog{gap:10px}
+  .tg{max-width:100%}
+  .tbl-row{flex-wrap:wrap}
+  .tbl-row .tx{flex:1 1 100%;order:3}
+  .seg{gap:3px;padding:3px}
+  .seg button{font-size:12px;min-height:56px}
+  .seg button b{font-size:11px}
+  #bar{padding:8px 12px calc(8px + env(safe-area-inset-bottom))}
+  #bar .in{flex-wrap:wrap;gap:8px;min-height:0}
+  #bar .grow,#bar .bhint{display:none}
+  .bpri{order:-1;width:100%}.bpri .btn{flex:1}
+  .bsec{width:100%}.bsec .btn{flex:1;min-width:0;padding:0 8px;min-height:44px;font-size:13px}
+  .bsec .btn.plain{flex:0 0 auto}
+  .ready{width:100%;order:2;justify-content:center}
+  dialog{width:100vw;max-width:100vw;max-height:92dvh;margin:auto 0 0;border-radius:20px 20px 0 0}
+  .dh,.dbody,.dfoot{padding-left:16px;padding-right:16px}
+  .dfoot .btn{flex:1}
+  #toast{bottom:calc(130px + env(safe-area-inset-bottom))}
+}
+@media (max-width:420px){
+  .grid2{grid-template-columns:1fr}
+}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -237,7 +293,7 @@ dialog[open]{animation:pop .25s cubic-bezier(.2,.8,.2,1)}
 /* ================= 設定（接続先は config.js で指定） ================= */
 const API_URL = (window.APP_CONFIG && window.APP_CONFIG.API_URL) || '';
 const API_OK = !!API_URL && !/YOUR-DEPLOYMENT-ID/.test(API_URL);
-const EXPECT_API_VERSION = 5; // GAS側（Code.gs）の API_VERSION と一致している必要がある
+const EXPECT_API_VERSION = 6; // GAS側（Code.gs）の API_VERSION と一致している必要がある
 
 const MAMMOTH_URL = 'https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js';
 const PDFJS_URL = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js';
@@ -253,12 +309,14 @@ const CATS = {
   prep: { label: '面談対策資料ベース', sub: '取り込んだ資料の内容から出題', need: 'prep', needMsg: 'オプション設定で面談対策資料を取り込むと選べます' }
 };
 const CAT_ORDER = ['hr', 'tech', 'biz', 'proj', 'pj', 'prep'];
-const LEVELS = [['jr', '若手'], ['mid', '中堅'], ['lead', 'リード']];
-const LEVEL_LABEL = { jr: '若手', mid: '中堅', lead: 'リード' };
+const LEVELS = [['l1', 'Lv1', '入門'], ['l2', 'Lv2', '初級'], ['l3', 'Lv3', '中級'], ['l4', 'Lv4', '上級'], ['l5', 'Lv5', 'リード']];
+const LEVEL_LABEL = { l1: 'Lv1 入門', l2: 'Lv2 初級', l3: 'Lv3 中級', l4: 'Lv4 上級', l5: 'Lv5 リード' };
 const LEVEL_DESC = {
-  jr: '基礎知識・学習姿勢・指示を受けて動いた経験を中心に出題します。',
-  mid: '設計判断・改善・トラブル対応・調整力を中心に、「なぜ」を深掘りします。',
-  lead: '意思決定・リスク管理・チーム運営・顧客折衝を、状況設定つきの質問で問います。'
+  l1: '未経験〜実務1年目向け。基本用語や担当した作業など、平易な質問を中心に出題します。採点はやや甘めです。',
+  l2: '実務1〜3年目向け。担当範囲と、その方法を選んだ基本的な理由を中心に出題します。',
+  l3: '実務3〜6年目向け。判断の理由や改善の経験を中心に、「なぜ」を問います。',
+  l4: '実務6〜10年目向け。トレードオフ、再発防止、後輩・チームへの波及まで深掘りします。',
+  l5: 'リーダー・PM向け。意思決定・リスク管理・顧客折衝を、状況設定つきの質問で問います。採点はやや厳しめです。'
 };
 const AXES = [
   { k: 'conclusion', name: '結論ファースト', short: '結論', color: '#1F5FBF' },
@@ -305,7 +363,7 @@ const S = {
   screen: 'setup', skillText: '', skillFile: '', skillInfo: '', projectText: '', prepText: '', prepInfo: '',
   engineerName: '', engineerNameTouched: false, saveText: true,
   userName: '', token: '', loginOpen: false,
-  mask: true, maskWords: '', cats: { hr: true, tech: true, biz: true, proj: true, pj: false, prep: false }, level: 'mid',
+  mask: true, maskWords: '', cats: { hr: true, tech: true, biz: true, proj: true, pj: false, prep: false }, level: 'l3',
   autoRead: true, autoRec: true, qVoice: true, voiceName: '', rate: 1.0,
   questions: [], idx: 0, results: [], transcript: '', stats: null, answered: false, recording: false, finalizing: false, secs: 0,
   fb: null, error: '', saveMsg: '', saved: false, saving: false, sessionId: '', finishedAt: null,
@@ -574,14 +632,14 @@ function micErrorMsg(err) {
 }
 function ensureMic() {
   if (!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) return Promise.reject({ name: 'Unsupported' });
-  return navigator.mediaDevices.getUserMedia({ audio: true }).then(st => { st.getTracks().forEach(t => t.stop()); S.micOk = true; renderStatus(); });
+  return navigator.mediaDevices.getUserMedia({ audio: true }).then(st => { st.getTracks().forEach(t => t.stop()); S.micOk = true; renderStatus(); updateSetupBar(); });
 }
 function checkMic() {
-  ensureMic().then(() => { S.micMsg = 'マイクを使用できます。'; render(); })
-    .catch(err => { S.micOk = false; S.micMsg = micErrorMsg(err); render(); });
+  ensureMic().then(() => { S.micMsg = 'マイクを使用できます。'; updateMic(); })
+    .catch(err => { S.micOk = false; S.micMsg = micErrorMsg(err); updateMic(); });
 }
 function startRec() {
-  if (!SR) { S.answered = true; S.error = 'このブラウザは音声認識に対応していません（Google Chromeを推奨）。下の欄に文字で回答を入力してください。'; return render(); }
+  if (!SR) { S.answered = true; S.error = 'この端末・ブラウザは音声認識に対応していません（Google Chromeを推奨。iPhoneは非対応）。下の欄に文字で回答してください（スマホのキーボードの音声入力も使えます）。'; return render(); }
   stopSpeak();
   S.transcript = ''; S.stats = null; S.secs = 0; S.answered = false; S.error = '';
   ensureMic().then(beginRec).catch(err => { S.answered = true; S.micOk = false; S.error = micErrorMsg(err); render(); });
@@ -691,7 +749,7 @@ function evaluate() {
   const q = S.questions[S.idx];
   if (!S.transcript || S.transcript.trim().length < 5) { S.error = '回答が空です。録音するか、文字で回答を入力してください。'; return render(); }
   S.error = '';
-  busy('回答を評価しています…（回答例も作成します）', true);
+  busy('回答を評価しています…（模範解答も作成します）', true);
   const an = analyze(S.transcript), sp = { an, stats: S.stats };
   api('evaluateAnswer', {
     question: q.text, intent: q.intent, category: q.category, level: S.level,
@@ -753,11 +811,11 @@ const resetScroll = () => { $('main').scrollTop = 0; };
 function openSample() {
   const q = S.questions[S.idx], fb = S.fb;
   $('dlgbody').innerHTML =
-    '<div class="dh">' + ic('spark', '') + '<h3 id="dlgtitle">回答例</h3><span class="tag">Q' + q.no + '</span><button class="x" data-act="closedlg" aria-label="閉じる">×</button></div>' +
+    '<div class="dh">' + ic('spark', '') + '<h3 id="dlgtitle">模範解答</h3><span class="tag">Q' + q.no + '</span><button class="x" data-act="closedlg" aria-label="閉じる">×</button></div>' +
     '<div class="dbody"><div class="dq">' + esc(q.text) + '</div>' +
     '<div class="dcols"><div class="dcol"><div class="dlabel">あなたの回答</div><div class="dtext">' + highlight(S.transcript) + '</div></div>' +
-    '<div class="dcol ex"><div class="dlabel">回答例（話すと約30〜60秒）</div><div class="dtext" id="sampletext">' + esc(fb.sample) + '</div></div></div>' +
-    '<div class="dcol"><div class="dlabel">組み立ての骨子</div><div class="dtext" style="font-size:14px;line-height:1.9">' + esc(fb.model) + '</div></div>' +
+    '<div class="dcol ex"><div class="dlabel">模範解答（話すと約30〜60秒）</div><div class="dtext" id="sampletext">' + esc(fb.sample) + '</div></div></div>' +
+    '<div class="dcol"><div class="dlabel">模範解答の骨子</div><div class="dtext" style="font-size:14px;line-height:1.9">' + esc(fb.model) + '</div></div>' +
     '<p class="small">スキルシートの記載をもとにした例です。「（具体的な数字）」などの箇所は、実際の内容に置き換えてください。</p></div>' +
     '<div class="dfoot"><button class="btn ghost min" data-act="speaksample">' + svg('speaker') + '読み上げ</button><button class="btn ghost min" data-act="copysample">' + svg('copy') + 'コピー</button><button class="btn min" data-act="closedlg">閉じる</button></div>';
   const d = $('dlg');
@@ -805,8 +863,8 @@ function reportText() {
     L.push('【評価】' + r.score + ' / 100（' + axesLine(r) + '）');
     L.push('【良かった点】' + r.good);
     L.push('【改善ポイント】' + r.improve);
-    L.push('【回答の組み立て例】' + r.model);
-    L.push('【回答例】' + r.sample);
+    L.push('【模範解答の骨子】' + r.model);
+    L.push('【模範解答】' + r.sample);
     L.push('【話し方】' + speechLine(r));
     L.push('');
   });
@@ -828,8 +886,8 @@ function reportHtml() {
     h += '<p><span class="k">評価：</span>' + r.score + ' / 100（' + esc(axesLine(r)) + '）</p>';
     h += '<p><span class="k">良かった点：</span>' + esc(r.good) + '</p>';
     h += '<p><span class="k">改善ポイント：</span>' + esc(r.improve) + '</p>';
-    h += '<p><span class="k">回答の組み立て例：</span>' + esc(r.model) + '</p>';
-    h += '<p><span class="k">回答例：</span>' + esc(r.sample) + '</p>';
+    h += '<p><span class="k">模範解答の骨子：</span>' + esc(r.model) + '</p>';
+    h += '<p><span class="k">模範解答：</span>' + esc(r.sample) + '</p>';
     h += '<p><span class="k">話し方：</span>' + esc(speechLine(r)) + '</p>';
   });
   return h + '</body></html>';
@@ -838,13 +896,13 @@ const exportText = () => download('面談対策結果_' + effName() + '_' + file
 const exportWord = () => download('面談対策結果_' + effName() + '_' + fileStamp(S.finishedAt || new Date()) + '.doc', 'application/msword;charset=utf-8', '\ufeff' + reportHtml());
 
 /* ================= 図表（レーダー・リング）とアニメーション ================= */
-const RW = 260, RH = 214, RCX = 130, RCY = 106, RR = 60;
+const RW = 320, RH = 232, RCX = 160, RCY = 116, RR = 64;
 const rpt = (i, r) => { const a = -Math.PI / 2 + i * 2 * Math.PI / AXES.length; return [RCX + r * Math.cos(a), RCY + r * Math.sin(a)]; };
 
 /** 4軸（各25点）のレーダーチャート。多角形は中心から描き始め、afterRender で「うにっ」と伸ばす */
 function radarSvg(id, vals) {
   const n = AXES.length;
-  let s = '<svg id="rd-' + id + '" data-radar="' + vals.join(',') + '" viewBox="0 0 ' + RW + ' ' + RH + '" width="100%" role="img" aria-label="評価レーダーチャート（' + AXES.map((a, i) => a.name + ' ' + vals[i] + '点').join('、') + '）">';
+  let s = '<svg id="rd-' + id + '" data-radar="' + vals.join(',') + '" viewBox="0 0 ' + RW + ' ' + RH + '" width="100%" style="overflow:visible" role="img" aria-label="評価レーダーチャート（' + AXES.map((a, i) => a.name + ' ' + vals[i] + '点').join('、') + '）">';
   s += '<defs><linearGradient id="rg-' + id + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1F5FBF" stop-opacity=".38"/><stop offset="1" stop-color="#7A4FD6" stop-opacity=".30"/></linearGradient></defs>';
   [0.2, 0.4, 0.6, 0.8, 1].forEach((f, gi) => {
     const p = []; for (let i = 0; i < n; i++) { const q = rpt(i, RR * f); p.push(q[0].toFixed(1) + ',' + q[1].toFixed(1)); }
@@ -908,7 +966,7 @@ function afterRender(animate) {
 /* ================= 描画 ================= */
 function renderSteps() {
   const order = STEPS.map(s => s[0]), cur = order.indexOf(S.screen);
-  $('steps').innerHTML = STEPS.map((s, i) => '<div class="step' + (i === cur ? ' on' : (i < cur ? ' done' : '')) + '"><i>' + (i < cur ? '✓' : (i + 1)) + '</i>' + s[1] + '</div>').join('');
+  $('steps').innerHTML = STEPS.map((s, i) => '<div class="step' + (i === cur ? ' on' : (i < cur ? ' done' : '')) + '"><i>' + (i < cur ? '✓' : (i + 1)) + '</i><span class="sl">' + s[1] + '</span></div>').join('');
 }
 function sbChip(label, cls, extra) { return '<span class="chip' + (extra || '') + '"><i class="dot ' + cls + '"></i>' + label + '</span>'; }
 function renderStatus() {
@@ -923,7 +981,6 @@ function renderStatus() {
     r += S.qVoice ? sbChip('音声 ON', 'ok') : sbChip('音声 OFF', '');
     r += S.recording ? '<span class="chip rec"><i class="dot rec"></i>録音中 <span id="stimer">' + mmss(S.secs) + '</span></span>' : sbChip(S.finalizing ? '確定中' : '録音 待機', '');
   }
-  if (S.screen === 'setup' && S.status && S.status.quota) r += '<span class="chip" title="本日のAPI利用回数">本日 ' + S.status.quota.used + ' / ' + S.status.quota.limit + ' 回</span>';
   if (S.screen === 'result') r += S.saved ? sbChip('保存済み', 'ok') : (S.saving ? sbChip('保存中…', '') : sbChip('未保存', ''));
   $('sbarin').innerHTML = '<div class="sb-l">' + l + '</div><div class="sb-r">' + r + '</div>';
 }
@@ -946,7 +1003,9 @@ function render() {
 }
 const needLogin = () => !S.token || !S.userName || S.loginOpen;
 
+let genreSig = '';
 function genreHtml() {
+  genreSig = CAT_ORDER.map(k => catAvailable(k) ? 1 : 0).join('');
   return CAT_ORDER.map(k => {
     const ok = catAvailable(k);
     if (!ok) S.cats[k] = false;
@@ -954,28 +1013,23 @@ function genreHtml() {
   }).join('');
 }
 function sumText() { return '案件詳細：' + (hasProject() ? '入力済み' : '未入力') + '　／　面談対策資料：' + (hasPrep() ? '取り込み済み' : '未取り込み') + '　／　個人情報マスク：' + (S.mask ? 'ON' : 'OFF'); }
-function updateGenres() { const g = $('genres'); if (g) g.innerHTML = genreHtml(); const s = $('accsum'); if (s) s.textContent = sumText(); }
-
-function vSetup() {
-  const lvBtns = LEVELS.map(l => '<button class="' + (S.level === l[0] ? 'on' : '') + '" data-act="lv" data-k="' + l[0] + '" aria-pressed="' + (S.level === l[0]) + '">' + l[1] + '</button>').join('');
-  const login = needLogin();
-  const ready = !login && S.skillText.trim().length >= 30 && !S.apiOld;
-
-  const loginCard = login ? '<div class="card a-blue">' + ch('user', '', '利用者の登録（初回のみ）') + '<p class="note">利用者名と、社内で共有されている合言葉を入力してください。この端末のブラウザに保存されます。</p>' +
-    '<div class="login"><div><label class="lb" for="un">利用者名</label><input type="text" id="un" data-bind="userName" value="' + esc(S.userName) + '" placeholder="例：山田" autocomplete="off"></div>' +
-    '<div><label class="lb" for="tk">合言葉</label><input type="password" id="tk" data-bind="token" value="' + esc(S.token) + '" autocomplete="off"></div>' +
-    '<button class="btn" data-act="login" style="min-height:44px">保存して接続</button></div></div>' : '';
-
-  const drop = '<div class="drop' + (S.skillFile ? ' has' : '') + '" id="drop"><div class="info">' + (S.skillFile
-    ? '<b>' + esc(S.skillFile) + '</b><span class="note">' + esc(S.skillInfo) + '</span>'
-    : '<b>スキルシートのExcelを選択</b><span class="note">.xlsx / .xls をここにドロップ、または右のボタンで選択（ファイルは外部に保存されません）</span>') + '</div>' +
-    '<button class="btn ghost" data-act="pick">' + svg('file') + (S.skillFile ? '別のファイルを選ぶ' : 'Excelファイルを選択') + '</button>' +
-    '<input type="file" id="file" accept=".xlsx,.xls" style="display:none"></div>';
-
-  let optBody = '';
+function updateSum() { const e = $('accsum'); if (e) e.textContent = sumText(); }
+function updateGenres() {
+  const sig = CAT_ORDER.map(k => catAvailable(k) ? 1 : 0).join('');
+  if (sig !== genreSig) { const g = $('genres'); if (g) g.innerHTML = genreHtml(); }
+  updateSum();
+}
+const lvSegHtml = () => LEVELS.map(l => '<button class="' + (S.level === l[0] ? 'on' : '') + '" data-act="lv" data-k="' + l[0] + '" aria-pressed="' + (S.level === l[0]) + '"><span>' + l[1] + '</span><b>' + l[2] + '</b></button>').join('');
+function micBoxHtml() {
+  const t = S.micOk === true ? '<span class="small" style="color:var(--green);font-weight:700">マイク：使用できます</span>' : (S.micOk === false ? '<span class="small" style="color:var(--red);font-weight:700">マイク：使用できません</span>' : '<span class="small">マイク：未確認</span>');
+  return '<div class="row-inline"><button class="btn ghost min" data-act="mic">' + svg('mic') + 'マイクを確認する</button>' + t + '</div>' +
+    (S.micMsg && S.micOk === false ? '<p class="note" role="status">' + esc(S.micMsg) + '</p>' : '');
+}
+function optCardHtml() {
+  let body = '';
   if (S.optOpen) {
     const nameVal = S.engineerNameTouched ? S.engineerName : S.userName;
-    optBody = '<div class="opts-body"><div class="stack" style="gap:12px">' +
+    body = '<div class="opts-body"><div class="stack" style="gap:12px">' +
       '<div><label class="lb" for="pj">案件詳細（入力すると「案件詳細ベース」の質問が選べます）</label>' +
       '<textarea id="pj" rows="4" data-bind="projectText" placeholder="例：ECサイト基盤のリニューアル。Java 17 / Spring Boot / AWS。要件定義後半から参画…">' + esc(S.projectText) + '</textarea></div>' +
       '<div class="sub-box"><span class="lb">面談対策資料（Excel / Word / PDF・複数可）</span>' +
@@ -995,29 +1049,60 @@ function vSetup() {
       '<div class="row-inline"><span class="small">利用者：' + esc(S.userName || '未登録') + '</span><button class="btn ghost min" data-act="relogin">利用者名・合言葉を変更</button></div>' +
       '</div></div>';
   }
+  return '<button class="acc" data-act="opt" aria-expanded="' + S.optOpen + '"><span style="display:flex;align-items:center;gap:10px">' + ic('sliders', 'orange') + '<span>オプション設定（任意）<br><span class="sum" id="accsum">' + esc(sumText()) + '</span></span></span><span class="chev" aria-hidden="true">' + svg('chev', ' width="20" height="20"') + '</span></button>' + body;
+}
+function setupBarHtml() {
+  const login = needLogin();
+  const ready = !login && S.skillText.trim().length >= 30 && !S.apiOld;
+  const chips = '<div class="ready">' +
+    sbChip('スキルシート', S.skillText.trim().length >= 30 ? 'ok' : '') +
+    sbChip('接続', S.conn === 'ok' ? 'ok' : (S.conn === 'error' ? 'ng' : '')) +
+    sbChip('マイク', S.micOk === true ? 'ok' : (S.micOk === false ? 'ng' : '')) + '</div>';
+  return chips + '<span class="small grow bhint" style="margin-left:6px">' + (login ? '利用者名と合言葉を登録してください。' : (S.apiOld ? 'GAS側を更新してください。' : (ready ? '準備ができました。' : 'スキルシートのExcelを取り込むと開始できます。'))) + '</span>' +
+    '<div class="bpri"><button class="btn" data-act="start"' + (ready ? '' : ' disabled') + '>面談を開始する（10問）</button></div>';
+}
+/* ---- 部分更新（画面全体を描き直さないので、ちらつかない） ---- */
+function setLevel(k) {
+  S.level = k;
+  document.querySelectorAll('#lvseg button').forEach(b => { const on = b.getAttribute('data-k') === k; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
+  const d = $('lvdesc'); if (d) d.textContent = LEVEL_DESC[k];
+  renderStatus();
+}
+function toggleCat(k) {
+  S.cats[k] = !S.cats[k];
+  const b = document.querySelector('#genres [data-k="' + k + '"]');
+  if (b) { b.classList.toggle('on', S.cats[k]); b.setAttribute('aria-pressed', !!S.cats[k]); }
+}
+function updateOpt() { const c = $('optcard'); if (c) { c.innerHTML = optCardHtml(); fillVoiceSelect(); } }
+function updateMic() { const m = $('micbox'); if (m) m.innerHTML = micBoxHtml(); renderStatus(); updateSetupBar(); }
+function updateSetupBar() { if (S.screen === 'setup') $('barin').innerHTML = setupBarHtml(); }
 
-  const micTxt = S.micOk === true ? '<span class="small" style="color:var(--green);font-weight:700">マイク：使用できます</span>' : (S.micOk === false ? '<span class="small" style="color:var(--red);font-weight:700">マイク：使用できません</span>' : '<span class="small">マイク：未確認</span>');
+function vSetup() {
+  const login = needLogin();
+
+  const loginCard = login ? '<div class="card a-blue">' + ch('user', '', '利用者の登録（初回のみ）') + '<p class="note">利用者名と、社内で共有されている合言葉を入力してください。この端末のブラウザに保存されます。</p>' +
+    '<div class="login"><div><label class="lb" for="un">利用者名</label><input type="text" id="un" data-bind="userName" value="' + esc(S.userName) + '" placeholder="例：山田" autocomplete="off"></div>' +
+    '<div><label class="lb" for="tk">合言葉</label><input type="password" id="tk" data-bind="token" value="' + esc(S.token) + '" autocomplete="off"></div>' +
+    '<button class="btn" data-act="login" style="min-height:44px">保存して接続</button></div></div>' : '';
+
+  const drop = '<div class="drop' + (S.skillFile ? ' has' : '') + '" id="drop"><div class="info">' + (S.skillFile
+    ? '<b>' + esc(S.skillFile) + '</b><span class="note">' + esc(S.skillInfo) + '</span>'
+    : '<b>スキルシートのExcelを選択</b><span class="note">.xlsx / .xls をここにドロップ、または右のボタンで選択（ファイルは外部に保存されません）</span>') + '</div>' +
+    '<button class="btn ghost" data-act="pick">' + svg('file') + (S.skillFile ? '別のファイルを選ぶ' : 'Excelファイルを選択') + '</button>' +
+    '<input type="file" id="file" accept=".xlsx,.xls" style="display:none"></div>';
 
   const main = '<div class="stack">' + loginCard +
     '<div class="card">' + ch('file', '', '1. スキルシート（Excel）') + drop + '</div>' +
     '<div class="g2">' +
     '<div class="card">' + ch('list', 'teal', '2. 質問のジャンル（複数選択）') + '<div class="grid2" id="genres">' + genreHtml() + '</div></div>' +
-    '<div class="card">' + ch('target', 'purple', '3. 想定レベルと録音の準備') + '<div class="seg">' + lvBtns + '</div>' +
-    '<p class="note">' + LEVEL_DESC[S.level] + '</p>' +
+    '<div class="card">' + ch('target', 'purple', '3. 想定レベルと録音の準備') + '<div class="seg" id="lvseg" role="group" aria-label="想定レベル">' + lvSegHtml() + '</div>' +
+    '<p class="note" id="lvdesc">' + LEVEL_DESC[S.level] + '</p>' +
     '<label class="chk"><input type="checkbox" data-act="autoRead"' + (S.autoRead ? ' checked' : '') + '><span>質問を自動で読み上げる（質問ごとにON/OFFも切り替え可）</span></label>' +
     '<label class="chk"><input type="checkbox" data-act="autoRec"' + (S.autoRec ? ' checked' : '') + '><span>読み上げ後に自動で録音を始める</span></label>' +
-    '<div class="row-inline"><button class="btn ghost min" data-act="mic">' + svg('mic') + 'マイクを確認する</button>' + micTxt + '</div>' +
-    (S.micMsg && S.micOk === false ? '<p class="note" role="status">' + esc(S.micMsg) + '</p>' : '') + '</div></div>' +
-    '<div class="card"><button class="acc" data-act="opt" aria-expanded="' + S.optOpen + '"><span style="display:flex;align-items:center;gap:10px">' + ic('sliders', 'orange') + '<span>オプション設定（任意）<br><span class="sum" id="accsum">' + esc(sumText()) + '</span></span></span><span class="chev" aria-hidden="true">' + svg('chev', ' width="20" height="20"') + '</span></button>' + optBody + '</div>' +
+    '<div id="micbox">' + micBoxHtml() + '</div></div></div>' +
+    '<div class="card" id="optcard">' + optCardHtml() + '</div>' +
     '</div>';
-
-  const chips = '<div class="ready">' +
-    sbChip('スキルシート', S.skillText.trim().length >= 30 ? 'ok' : '') +
-    sbChip('接続', S.conn === 'ok' ? 'ok' : (S.conn === 'error' ? 'ng' : '')) +
-    sbChip('マイク', S.micOk === true ? 'ok' : (S.micOk === false ? 'ng' : '')) + '</div>';
-  const bar = chips + '<span class="small grow" style="margin-left:6px">' + (login ? '利用者名と合言葉を登録してください。' : (S.apiOld ? 'GAS側を更新してください。' : (ready ? '準備ができました。' : 'スキルシートのExcelを取り込むと開始できます。'))) + '</span>' +
-    '<button class="btn" data-act="start"' + (ready ? '' : ' disabled') + '>面談を開始する（10問）</button>';
-  return { main, bar };
+  return { main, bar: setupBarHtml() };
 }
 
 function vQuestion() {
@@ -1051,11 +1136,13 @@ function vQuestion() {
     '<div class="card center"><div class="wave' + (S.recording ? ' on' : '') + '" aria-hidden="true">' + bars + '</div>' +
     '<div style="font-size:14px;font-weight:600">' + label + '</div>' + gauge + body + '</div></div>';
 
-  let bar = '<button class="btn ghost" data-act="skip"' + (S.finalizing ? ' disabled' : '') + '>スキップ</button><button class="btn ghost" data-act="speak"' + ((S.recording || S.finalizing) ? ' disabled' : '') + '>' + svg('speaker') + '質問をもう一度聞く</button><span class="grow"></span>';
-  if (S.recording) bar += '<button class="btn rec pulse" data-act="stop">■ 録音を停止</button>';
-  else if (S.finalizing) bar += '<button class="btn" disabled>確定中…</button>';
-  else if (S.answered) bar += '<button class="btn ghost" data-act="rec">録り直す</button><button class="btn" data-act="eval">回答を評価する</button>';
-  else bar += '<button class="btn plain" data-act="typeonly">文字で回答する</button><button class="btn" data-act="rec">' + svg('mic') + '録音を開始</button>';
+  let sec = '<button class="btn ghost" data-act="skip"' + (S.finalizing ? ' disabled' : '') + '>スキップ</button><button class="btn ghost" data-act="speak"' + ((S.recording || S.finalizing) ? ' disabled' : '') + '>' + svg('speaker') + 'もう一度聞く</button>';
+  let pri;
+  if (S.recording) pri = '<button class="btn rec pulse" data-act="stop">■ 録音を停止</button>';
+  else if (S.finalizing) pri = '<button class="btn" disabled>確定中…</button>';
+  else if (S.answered) pri = '<button class="btn ghost" data-act="rec">録り直す</button><button class="btn" data-act="eval">回答を評価する</button>';
+  else { sec += '<button class="btn plain" data-act="typeonly">文字で回答</button>'; pri = '<button class="btn" data-act="rec">' + svg('mic') + '録音を開始</button>'; }
+  const bar = '<div class="bsec">' + sec + '</div><span class="grow"></span><div class="bpri">' + pri + '</div>';
   return { main, bar };
 }
 
@@ -1095,7 +1182,7 @@ function vFeedback() {
     '<div class="g2">' +
     '<div class="card a-blue">' + ch('chart', '', 'この回答の評価', '<span class="bandbadge" style="background:' + b.bg + ';color:' + b.color + '">' + b.label + '</span>') +
     '<div class="evalbox">' + ringHtml('s', fb.score) + '<div class="radar">' + radarSvg('q', vals) + '</div></div>' +
-    '<div class="axes">' + axes + '</div><div class="sumline">' + sumline + '（4軸の合計＝100点満点）</div></div>' +
+    '<div class="axes">' + axes + '</div><div class="sumline">' + sumline + '（4軸の合計）</div></div>' +
     '<div class="card">' + ch('target', 'teal', 'あなたの回答', '<span class="tag">Q' + q.no + ' / ' + S.questions.length + '</span>') +
     '<div style="font-size:15px;font-weight:700;line-height:1.7">' + esc(q.text) + '</div>' +
     '<div class="scroll" style="max-height:230px;font-size:14px;line-height:1.95;white-space:pre-wrap;background:#F7F9FC;border-radius:12px;padding:12px">' + highlight(S.transcript) + '</div>' +
@@ -1107,10 +1194,10 @@ function vFeedback() {
     '<div class="card a-purple">' + ch('mic', 'purple', '話し方のチェック') + '<div class="chips">' + chips + '</div><p class="note">' + adv.join('<br>') + '</p>' +
     '<span class="small">Chromeの音声認識は言い淀みを自動で省くことがあり、実際より少なく表示される場合があります。</span></div>' +
     '</div>' +
-    '<div class="card model">' + ch('book', '', '回答の組み立て例') + '<p>' + esc(fb.model) + '</p>' +
-    '<div class="row-inline"><button class="btn min" data-act="opensample">' + svg('spark') + '回答例を見る（テキスト）</button><span class="small">あなたの回答と並べて確認できます</span></div></div>' +
+    '<div class="card model">' + ch('book', '', '模範解答の骨子') + '<p>' + esc(fb.model) + '</p>' +
+    '<div class="row-inline"><button class="btn min" data-act="opensample">' + svg('spark') + '模範解答を見る（テキスト）</button><span class="small">あなたの回答と並べて確認できます</span></div></div>' +
     '</div>';
-  const bar = '<span class="grow"></span><button class="btn ghost" data-act="opensample">' + svg('spark') + '回答例を見る</button><button class="btn" data-act="next">' + (S.idx >= S.questions.length - 1 ? '結果を見る' : '次の質問へ') + '</button>';
+  const bar = '<div class="bsec">' + '<button class="btn ghost" data-act="opensample">' + svg('spark') + '模範解答を見る</button></div><span class="grow"></span><div class="bpri"><button class="btn" data-act="next">' + (S.idx >= S.questions.length - 1 ? '結果を見る' : '次の質問へ') + '</button></div>';
   return { main, bar };
 }
 
@@ -1142,8 +1229,8 @@ function vResult() {
     '<div class="col">' +
     '<div class="card a-orange">' + ch('up', 'orange', '次回に向けた重点ポイント') + (sm.valid.length ? tips.join('') : '<p class="note">回答がありません。</p>') + '</div>' +
     '<div class="card fill">' + ch('file', '', '各質問の結果') + '<div class="scroll" style="max-height:340px">' + rows + '</div></div></div></div>';
-  const bar = '<span class="grow"></span><button class="btn ghost" data-act="exptxt"' + (sm.valid.length ? '' : ' disabled') + '>テキストで保存</button><button class="btn ghost" data-act="expdoc"' + (sm.valid.length ? '' : ' disabled') + '>Wordで保存</button>' +
-    '<button class="btn ghost" data-act="back">設定に戻る</button><button class="btn" data-act="restart">新しい10問で練習する</button>';
+  const bar = '<div class="bsec"><button class="btn ghost" data-act="exptxt"' + (sm.valid.length ? '' : ' disabled') + '>テキスト保存</button><button class="btn ghost" data-act="expdoc"' + (sm.valid.length ? '' : ' disabled') + '>Word保存</button>' +
+    '<button class="btn ghost" data-act="back">設定に戻る</button></div><span class="grow"></span><div class="bpri"><button class="btn" data-act="restart">新しい10問で練習する</button></div>';
   return { main, bar };
 }
 
@@ -1152,12 +1239,12 @@ document.addEventListener('click', e => {
   if (e.target === $('dlg')) { closeSample(); return; }
   const t = e.target.closest('[data-act]'); if (!t || t.disabled) return;
   const a = t.getAttribute('data-act'), k = t.getAttribute('data-k');
-  if (a === 'cat') { S.cats[k] = !S.cats[k]; updateGenres(); }
-  else if (a === 'lv') { S.level = k; render(); }
+  if (a === 'cat') toggleCat(k);
+  else if (a === 'lv') setLevel(k);
   else if (a === 'pick') $('file').click();
   else if (a === 'pickprep') $('prepfile').click();
-  else if (a === 'clearprep') { S.prepText = ''; S.prepInfo = ''; render(); }
-  else if (a === 'opt') { S.optOpen = !S.optOpen; render(); }
+  else if (a === 'clearprep') { S.prepText = ''; S.prepInfo = ''; updateOpt(); updateGenres(); }
+  else if (a === 'opt') { S.optOpen = !S.optOpen; updateOpt(); }
   else if (a === 'login') saveLogin();
   else if (a === 'relogin') { S.loginOpen = true; render(); }
   else if (a === 'mic') checkMic();
@@ -1171,7 +1258,7 @@ document.addEventListener('click', e => {
   else if (a === 'opensample') openSample();
   else if (a === 'closedlg') closeSample();
   else if (a === 'speaksample') speak(S.fb.sample);
-  else if (a === 'copysample') { const txt = S.fb.sample; (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(() => toast('回答例をコピーしました')).catch(() => toast('コピーできませんでした')); }
+  else if (a === 'copysample') { const txt = S.fb.sample; (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(() => toast('模範解答をコピーしました')).catch(() => toast('コピーできませんでした')); }
   else if (a === 'typeonly') { stopSpeak(); S.answered = true; S.transcript = ''; S.stats = null; render(); const tx = $('tx'); if (tx) tx.focus(); }
   else if (a === 'eval') evaluate();
   else if (a === 'skip') skip();
@@ -1184,7 +1271,7 @@ document.addEventListener('change', e => {
   if (e.target.id === 'file' && e.target.files[0]) readSkillExcel(e.target.files[0]);
   if (e.target.id === 'prepfile' && e.target.files.length) readPrepFiles(e.target.files);
   const act = e.target.getAttribute && e.target.getAttribute('data-act');
-  if (act === 'mask') { S.mask = e.target.checked; updateGenres(); }
+  if (act === 'mask') { S.mask = e.target.checked; updateSum(); }
   if (act === 'autoRead') S.autoRead = e.target.checked;
   if (act === 'autoRec') S.autoRec = e.target.checked;
   if (act === 'saveText') S.saveText = e.target.checked;
