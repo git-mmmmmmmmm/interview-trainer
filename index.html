@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<base target="_top">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>面談対策トレーナー</title>
@@ -9,98 +8,102 @@
 <style>
 :root{--ink:#1B2430;--muted:#55606E;--line:#D9DEE5;--ground:#F4F6F9;--card:#FFFFFF;--accent:#1F5FBF;--accent-d:#174A94;--accent-soft:#E8F0FC;--good:#17663A;--good-bg:#E6F4EC;--warn:#8A4B08;--warn-bg:#FDF1E3;--rec:#B3261E;--track:#DDE3EB}
 *{box-sizing:border-box}
-body{margin:0;font-family:'Noto Sans JP','Hiragino Sans','Meiryo',system-ui,sans-serif;color:var(--ink);background:var(--ground)}
+html,body{height:100%;margin:0}
+body{display:flex;flex-direction:column;overflow:hidden;font-family:'Noto Sans JP','Hiragino Sans','Meiryo',system-ui,sans-serif;color:var(--ink);background:var(--ground)}
 button{font-family:inherit;cursor:pointer}
-textarea,input[type=text]{font-family:inherit;color:var(--ink)}
-.top{background:#fff;border-bottom:1px solid var(--line);padding:0 24px;min-height:64px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+textarea,input[type=text],input[type=password]{font-family:inherit;color:var(--ink);width:100%;border:1px solid #B8C0CC;border-radius:8px;padding:10px 12px;font-size:14px;line-height:1.7;background:#fff}
+textarea:focus,input:focus,button:focus-visible{outline:3px solid #9DBDF0;outline-offset:1px}
+
+/* ---- 骨格：ヘッダー / スクロール領域 / 下部固定バー ---- */
+.top{flex:none;background:#fff;border-bottom:1px solid var(--line);padding:0 24px;min-height:56px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
 .top h1{font-size:18px;margin:0}
-.steps{display:flex;flex-wrap:wrap;gap:8px;padding:10px 0}
-.step{font-size:13px;font-weight:700;padding:8px 14px;border-radius:999px;background:#E8ECF2;color:#3D4856}
+.steps{display:flex;flex-wrap:wrap;gap:8px;padding:8px 0}
+.step{font-size:13px;font-weight:700;padding:7px 14px;border-radius:999px;background:#E8ECF2;color:#3D4856}
 .step.on{background:var(--accent);color:#fff}
-main{max-width:1120px;margin:0 auto;padding:24px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:14px;margin-bottom:20px}
-.card h2{font-size:16px;margin:0}
+#main{flex:1;min-height:0;overflow:auto;padding:16px 24px}
+.wrap{max-width:1040px;margin:0 auto}
+#bar{flex:none;background:#fff;border-top:1px solid var(--line);padding:10px 24px}
+#bar .in{max-width:1040px;margin:0 auto;display:flex;align-items:center;gap:12px;min-height:48px}
+.grow{flex:1;min-width:0}
+
+/* ---- 共通レイアウト：全画面で同じ2カラム・同じ余白 ---- */
+.g2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:stretch}
+.col{display:flex;flex-direction:column;gap:16px;min-width:0}
+.col>.card.fill{flex:1}
+.stack{display:flex;flex-direction:column;gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.card h2{font-size:15px;margin:0}
 .note{font-size:13px;color:var(--muted);line-height:1.7;margin:0}
-.row{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start}
-.col-main{flex:999 1 520px;min-width:0}
-.col-side{flex:1 1 280px;min-width:0}
-label.lb{font-size:13px;font-weight:500}
-textarea,input[type=text]{width:100%;border:1px solid #B8C0CC;border-radius:8px;padding:12px;font-size:14px;line-height:1.7;background:#fff}
-textarea:focus,input[type=text]:focus,button:focus-visible{outline:3px solid #9DBDF0;outline-offset:1px}
-.drop{border:2px dashed #9AA7B8;border-radius:10px;padding:20px;text-align:center;background:#FAFBFD;display:flex;flex-direction:column;gap:8px;align-items:center}
-.drop.has{border-style:solid;border-color:var(--accent);background:var(--accent-soft)}
-.btn{min-height:48px;padding:0 24px;border:0;border-radius:10px;background:var(--accent);color:#fff;font-size:15px;font-weight:700}
+.small{font-size:12px;color:var(--muted);line-height:1.6}
+.lb{font-size:13px;font-weight:500}
+.tag{font-size:12px;font-weight:700;padding:4px 12px;border-radius:999px;background:var(--accent-soft);color:var(--accent-d);white-space:nowrap}
+
+/* ---- ボタン ---- */
+.btn{min-height:48px;padding:0 24px;border:0;border-radius:10px;background:var(--accent);color:#fff;font-size:15px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}
 .btn:disabled{background:#A9B4C4;cursor:not-allowed}
-.btn.sub{background:#fff;color:var(--accent-d);border:1px solid var(--accent)}
-.btn.rec{background:var(--rec);display:inline-flex;align-items:center;gap:10px}
-.btn.big{min-height:56px;border-radius:28px;padding:0 32px;font-size:16px}
-.btn.text{background:none;color:var(--muted);text-decoration:underline;min-height:40px;padding:0 8px;font-weight:500}
-.btn.full{width:100%;min-height:52px;font-size:16px}
-.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.opt{min-height:72px;text-align:left;display:flex;flex-direction:column;gap:4px;padding:12px 16px;border-radius:10px;border:1px solid #B8C0CC;background:#fff;color:#3D4856}
-.opt b{font-size:15px}.opt span{font-size:12px}
+.btn.ghost{background:#fff;color:var(--accent-d);border:1px solid var(--accent)}
+.btn.ghost:disabled{background:#F1F3F6;color:#8A94A3;border-color:#C5CCD6}
+.btn.rec{background:var(--rec)}
+.btn.min{min-height:40px;padding:0 16px;font-size:14px}
+.btn.plain{background:none;color:var(--muted);font-weight:500;padding:0 10px;text-decoration:underline}
+.opt{min-height:60px;text-align:left;display:flex;flex-direction:column;gap:2px;padding:8px 14px;border-radius:10px;border:1px solid #B8C0CC;background:#fff;color:#3D4856}
+.opt b{font-size:14px}.opt span{font-size:12px}
 .opt.on{border:2px solid var(--accent);background:var(--accent-soft);color:var(--accent-d)}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .seg{display:flex;gap:8px}
 .seg button{flex:1;min-height:44px;border-radius:8px;border:1px solid #B8C0CC;background:#fff;font-size:14px;font-weight:700;color:#3D4856}
 .seg button.on{border:2px solid var(--accent);background:var(--accent-soft);color:var(--accent-d)}
 .chk{display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.6}
-.chk input{width:20px;height:20px;margin-top:2px}
-.tag{font-size:12px;font-weight:700;padding:4px 12px;border-radius:999px;background:var(--accent-soft);color:var(--accent-d);white-space:nowrap}
-.bar{height:8px;background:var(--track);border-radius:4px}.bar>div{height:100%;border-radius:4px;background:var(--accent)}
-.bar.t{height:10px;border-radius:5px}.bar.t>div{border-radius:5px}
-.bar>div.low{background:#B4540A}
-.prog{display:flex;align-items:center;gap:16px}.prog .bar{flex:1}
-.qtext{font-size:24px;font-weight:700;line-height:1.6;margin:0}
-.center{display:flex;flex-direction:column;align-items:center;gap:14px}
-.wave{display:flex;align-items:center;gap:4px;height:48px}
+.chk input{width:18px;height:18px;margin-top:3px;flex:none}
+.drop{border:2px dashed #9AA7B8;border-radius:10px;padding:14px 18px;background:#FAFBFD;display:flex;justify-content:space-between;align-items:center;gap:16px}
+.drop.has{border-style:solid;border-color:var(--accent);background:var(--accent-soft)}
+.drop .info{display:flex;flex-direction:column;gap:2px;min-width:0}
+.acc{width:100%;display:flex;justify-content:space-between;align-items:center;gap:12px;background:none;border:0;padding:0;font-size:15px;font-weight:700;color:var(--ink);text-align:left;min-height:28px}
+.acc .sum{font-size:12px;font-weight:400;color:var(--muted)}
+.opts-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;padding-top:6px}
+.login{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;gap:12px;align-items:end}
+
+/* ---- 質問画面 ---- */
+.prog{display:flex;align-items:center;gap:16px;margin-bottom:16px}
+.prog b{font-size:14px;white-space:nowrap}
+.bar{height:8px;background:var(--track);border-radius:4px;flex:1}.bar>div{height:100%;border-radius:4px;background:var(--accent)}
+.bar.t{height:10px;border-radius:5px}.bar>div.low{background:#B4540A}
+.qtext{font-size:22px;font-weight:700;line-height:1.6;margin:0}
+.center{align-items:center;justify-content:center;text-align:center}
+.wave{display:flex;align-items:center;justify-content:center;gap:4px;height:40px}
 .wave i{display:block;width:5px;border-radius:3px;background:#B8C0CC}
 .wave.on i{background:var(--rec);animation:wv .9s ease-in-out infinite}
 @keyframes wv{0%,100%{transform:scaleY(.25)}50%{transform:scaleY(1)}}
-.tbox{background:#F7F9FC;border:1px solid var(--line);border-radius:8px;padding:12px;min-height:84px;font-size:15px;line-height:1.9;width:100%;white-space:pre-wrap}
-.fb-good{background:var(--good-bg);border:1px solid #B9DEC8;border-radius:12px;padding:20px}
-.fb-warn{background:var(--warn-bg);border:1px solid #F0D2A8;border-radius:12px;padding:20px}
-.fb-model{background:var(--accent-soft);border:1px solid #BFD3F2;border-radius:12px;padding:24px}
-.fb-good h3{color:var(--good)}.fb-warn h3{color:var(--warn)}.fb-model h3{color:var(--accent-d)}
-.fb-good h3,.fb-warn h3,.fb-model h3{font-size:13px;margin:0 0 8px}
-.fb-good p,.fb-warn p,.fb-model p{font-size:14px;line-height:1.9;margin:0}
-.score{font-size:40px;font-weight:700;color:var(--accent-d);margin-left:auto}
+.tbox{background:#F7F9FC;border:1px solid var(--line);border-radius:8px;padding:12px;min-height:110px;max-height:190px;overflow:auto;font-size:15px;line-height:1.9;width:100%;white-space:pre-wrap;text-align:left}
+
+/* ---- フィードバック・結果 ---- */
 .split{display:flex;align-items:baseline;gap:8px}
-.axis{display:flex;flex-direction:column;gap:6px;font-size:13px}.axis>div:first-child{display:flex;justify-content:space-between}
-.tbl-row{display:flex;align-items:center;gap:14px;padding:12px 0;border-top:1px solid #E6EAF0}
+.score{font-size:40px;font-weight:700;color:var(--accent-d);margin-left:auto;line-height:1}
+.big-score{font-size:52px;font-weight:700;color:var(--accent-d);line-height:1}
+.ax2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 20px}
+.axis{display:flex;flex-direction:column;gap:5px;font-size:13px}.axis>div:first-child{display:flex;justify-content:space-between}
+.sec h3{font-size:13px;margin:0 0 4px}
+.sec p{font-size:14px;line-height:1.8;margin:0}
+.sec.good h3{color:var(--good)}.sec.warn h3{color:var(--warn)}
+.sec+.sec{border-top:1px solid var(--line);padding-top:10px}
+.model{background:var(--accent-soft);border-color:#BFD3F2}
+.model h2{color:var(--accent-d)}
+.model p{font-size:14px;line-height:1.8;margin:0}
+.scroll{overflow:auto;max-height:230px}
+.tbl-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid #E6EAF0}
 .tbl-row .tx{flex:1;font-size:14px;line-height:1.6;min-width:0}
-.tips{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
-.tips div{background:var(--warn-bg);border-radius:10px;padding:16px;font-size:14px;line-height:1.8}
-.tips b{display:block;color:var(--warn);margin-bottom:4px}
-.err{background:#FDECEA;border:1px solid #F2B8B5;color:#7A1A14;border-radius:10px;padding:14px 16px;font-size:14px;line-height:1.7;margin-bottom:20px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.stat{background:#F7F9FC;border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:13px;line-height:1.5}
+.stat b{font-size:16px;display:block}
+.tip{background:var(--warn-bg);border-radius:10px;padding:12px 14px;font-size:14px;line-height:1.7}
+.tip b{display:block;color:var(--warn);margin-bottom:2px}
+mark.m1{background:#FFD9B0;color:#5A2E00;border-radius:3px;padding:0 2px;border-bottom:2px solid #B4540A}
+mark.m2{background:#FFF0B3;color:#5A4600;border-radius:3px;padding:0 2px;border-bottom:2px dashed #B48A00}
+.err{background:#FDECEA;border:1px solid #F2B8B5;color:#7A1A14;border-radius:10px;padding:12px 16px;font-size:14px;line-height:1.7;margin-bottom:16px}
 .ov{position:fixed;inset:0;background:rgba(244,246,249,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:10}
 .spin{width:44px;height:44px;border:5px solid var(--track);border-top-color:var(--accent);border-radius:50%;animation:sp 1s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
-.big-score{font-size:64px;font-weight:700;color:var(--accent-d);line-height:1}
-.small{font-size:12px;color:var(--muted)}
-.actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:flex-end}
-@media (max-width:600px){.qtext{font-size:20px}.grid2{grid-template-columns:1fr}}
-/* ---- 一画面向けコンパクト調整 ---- */
-main{padding:16px 24px}
-.card{padding:16px 20px;gap:10px;margin-bottom:14px}
-.top{min-height:56px}.steps{padding:8px 0}
-.opt{min-height:56px;padding:8px 14px}
-.drop.h{flex-direction:row;justify-content:space-between;align-items:center;text-align:left;padding:14px 18px;gap:16px}
-.drop.h .info{display:flex;flex-direction:column;gap:2px;min-width:0}
-.cols2{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:24px}
-.acc{width:100%;display:flex;justify-content:space-between;align-items:center;gap:12px;background:none;border:0;padding:0;font-size:16px;font-weight:700;color:var(--ink);text-align:left;min-height:32px}
-.acc .sum{font-size:12px;font-weight:400;color:var(--muted)}
-.opts-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;padding-top:6px}
-.qgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:stretch;margin-top:14px}
-.qgrid .card{margin-bottom:0}
-.qtext{font-size:22px}
-.wave{height:36px}
-.livebox{min-height:96px;max-height:150px;overflow:auto}
-.ax2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 20px}
-.tips1{grid-template-columns:1fr}
-.scroll{max-height:260px;overflow:auto}
-.big-score{font-size:52px}
-@media (max-width:860px){.cols2,.qgrid,.opts-body{grid-template-columns:1fr}}
-
+@media (max-width:860px){.g2,.opts-body,.login{grid-template-columns:1fr}body{overflow:auto}#main{overflow:visible}}
 </style>
 </head>
 <body>
@@ -108,10 +111,15 @@ main{padding:16px 24px}
   <h1>面談対策トレーナー</h1>
   <div class="steps" id="steps"></div>
 </div>
-<main id="app"></main>
+<div id="main"><div class="wrap" id="app"></div></div>
+<div id="bar"><div class="in" id="barin"></div></div>
 <div id="ov" class="ov" style="display:none"><div class="spin"></div><div id="ovmsg" style="font-weight:700"></div></div>
 
 <script>
+/* ================= 設定：GASをデプロイして発行された「/exec」のURLを設定 ================= */
+var API_URL = 'https://script.google.com/macros/s/AKfycbwCICS5Mg_ApkxgaRjjPtvvLNXCAhyGxW3qahpBVSBQ3uaaq68WdgJuMjXQz5TOp85l/exec';
+var API_OK = !/YOUR-DEPLOYMENT-ID/.test(API_URL);
+
 /* ================= 定数・状態 ================= */
 var CATS = {
   hr:   { label: '人事・自己PR', sub: '自己紹介・長所短所・志望動機' },
@@ -120,7 +128,12 @@ var CATS = {
   proj: { label: '案件・経験', sub: '直近案件の役割・課題・成果' }
 };
 var LEVELS = [['jr', '若手'], ['mid', '中堅'], ['lead', 'リード']];
-var AXES = [['conclusion', '結論ファースト'], ['concreteness', '具体性'], ['depth', '技術・業務の深さ'], ['concise', '簡潔さ']];
+var LEVEL_DESC = {
+  jr: '基礎知識・学習姿勢・指示を受けて動いた経験を中心に出題します。',
+  mid: '設計判断・改善・トラブル対応・調整力を中心に、「なぜ」を深掘りします。',
+  lead: '意思決定・リスク管理・チーム運営・顧客折衝を、状況設定つきの質問で問います。'
+};
+var AXES = [['conclusion', '結論ファースト'], ['concreteness', '具体性'], ['depth', '内容の深さ'], ['concise', '簡潔さ']];
 var STEPS = [['setup', '1 設定'], ['question', '2 音声で回答'], ['feedback', '3 フィードバック'], ['result', '4 結果']];
 var TIPS = {
   conclusion: ['結論を先に話す', '経験や背景から話し始める傾向があります。最初の一文で答えを言い切る練習をしましょう。'],
@@ -129,39 +142,79 @@ var TIPS = {
   concise: ['90秒にまとめる', '要点を2〜3個に絞り、結論→理由→具体例の順で話しましょう。']
 };
 
+// フィラー判定（「あの」「その」単体は指示語との区別がつかないため対象外）
+var RE_STRONG = '(?:えーっと|えーと|えっと|ええと|えー|あのー|あのう|そのー|うーん|んー|あー|まー|まあ)';
+var RE_HABIT = '(?:なんか|ちょっと|やっぱり|やっぱ|一応|とりあえず|なんていうか|何というか|みたいな)';
+
 var S = {
   screen: 'setup', skillText: '', skillFile: '', skillInfo: '', projectText: '', engineerName: '',
+  userName: '', token: '', loginOpen: false,
   mask: true, maskWords: '', cats: { hr: true, tech: true, biz: true, proj: true }, level: 'mid',
-  questions: [], idx: 0, results: [], transcript: '', answered: false, recording: false, secs: 0,
-  fb: null, error: '', saveMsg: '', status: null, optOpen: false, micMsg: ''
+  autoRead: true, autoRec: true,
+  questions: [], idx: 0, results: [], transcript: '', stats: null, answered: false, recording: false, finalizing: false, secs: 0,
+  fb: null, error: '', saveMsg: '', status: null, optOpen: false, micOk: null, micMsg: ''
 };
-var rec = null, timer = null;
 
 /* ================= ユーティリティ ================= */
 function $(id) { return document.getElementById(id); }
 function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
-function gs(fn, arg) {
-  return new Promise(function (resolve, reject) {
-    google.script.run.withSuccessHandler(resolve).withFailureHandler(function (e) {
-      reject(new Error((e && e.message ? e.message : String(e)).replace(/^Error:\s*/, '')));
-    })[fn](arg);
-  });
-}
 function busy(msg) { $('ov').style.display = msg ? 'flex' : 'none'; $('ovmsg').textContent = msg || ''; }
 function mmss(n) { return ('0' + Math.floor(n / 60)).slice(-2) + ':' + ('0' + (n % 60)).slice(-2); }
+function store(k, v) { try { if (v == null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) {} }
+function load(k) { try { return localStorage.getItem(k) || ''; } catch (e) { return ''; } }
+
+/** GAS API 呼び出し（text/plain で送ることで CORS のプリフライトを避ける） */
+function api(action, payload) {
+  if (!API_OK) return Promise.reject(new Error('API_URL が未設定です。index.html の API_URL に、GASの「/exec」のURLを設定してください。'));
+  return fetch(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ action: action, token: S.token, user: S.userName, payload: payload || {} })
+  }).then(function (r) {
+    return r.text();
+  }).then(function (txt) {
+    var j;
+    try { j = JSON.parse(txt); } catch (e) { throw new Error('サーバーの応答を解釈できません。GASのデプロイが「アクセスできるユーザー：全員」になっているか確認してください。'); }
+    if (!j.ok) throw new Error(j.error || 'サーバーでエラーが発生しました。');
+    return j.data;
+  }, function () {
+    throw new Error('サーバーに接続できません。ネットワークとAPI_URLを確認してください。');
+  });
+}
 
 /** 個人情報の簡易マスク（Geminiへ送る前にブラウザ側で実行） */
 function maskText(t) {
   if (!S.mask) return t;
   var out = String(t);
-  S.maskWords.split(/[,、\n]/).map(function (w) { return w.trim(); }).filter(Boolean).forEach(function (w) {
-    out = out.split(w).join('○○');
-  });
+  S.maskWords.split(/[,、\n]/).map(function (w) { return w.trim(); }).filter(Boolean).forEach(function (w) { out = out.split(w).join('○○'); });
   return out
     .replace(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, '[メール]')
     .replace(/https?:\/\/[^\s]+/g, '[URL]')
     .replace(/0\d{1,4}[-ー−‐]?\d{1,4}[-ー−‐]?\d{3,4}/g, '[電話]')
     .replace(/〒?\s?\d{3}[-ー−‐]\d{4}/g, '[郵便番号]');
+}
+
+/* ================= フィラー分析 ================= */
+function countMatches(text, reSrc) {
+  var re = new RegExp(reSrc, 'g'), m, map = {}, n = 0;
+  while ((m = re.exec(text))) { map[m[0]] = (map[m[0]] || 0) + 1; n++; }
+  return { map: map, n: n };
+}
+function analyze(text) {
+  var s = countMatches(text, RE_STRONG), h = countMatches(text, RE_HABIT);
+  var chars = String(text).replace(/[\s、。，．,.!?！？]/g, '').length;
+  return { strong: s.map, s: s.n, habit: h.map, h: h.n, chars: chars };
+}
+function highlight(text) {
+  var re = new RegExp('(' + RE_STRONG + ')|(' + RE_HABIT + ')', 'g'), out = '', last = 0, m;
+  while ((m = re.exec(text))) {
+    out += esc(text.slice(last, m.index)) + '<mark class="' + (m[1] ? 'm1' : 'm2') + '">' + esc(m[0]) + '</mark>';
+    last = m.index + m[0].length;
+  }
+  return out + esc(text.slice(last));
+}
+function listCounts(map) {
+  return Object.keys(map).map(function (k) { return esc(k) + ' ×' + map[k]; }).join('　');
 }
 
 /* ================= Excel取り込み ================= */
@@ -190,93 +243,158 @@ function readExcel(file) {
     } catch (err) {
       S.error = 'Excelの読み込みに失敗しました：' + err.message + '（.xlsx / .xls 形式か確認してください）';
     }
-    busy('');
-    render();
+    busy(''); render();
   };
   reader.onerror = function () { busy(''); S.error = 'ファイルを読み込めませんでした。'; render(); };
   reader.readAsArrayBuffer(file);
 }
 
-/* ================= 音声認識 ================= */
+/* ================= 質問の読み上げ ================= */
+var speakTok = 0;
+function stopSpeak() { speakTok++; try { window.speechSynthesis.cancel(); } catch (e) {} }
+function speak(text, done) {
+  if (!('speechSynthesis' in window)) { if (done) done(); return; }
+  stopSpeak();
+  var tok = speakTok;
+  var u = new SpeechSynthesisUtterance(text);
+  u.lang = 'ja-JP'; u.rate = 1.0;
+  var voices = window.speechSynthesis.getVoices();
+  for (var i = 0; i < voices.length; i++) { if (voices[i].lang === 'ja-JP') { u.voice = voices[i]; break; } }
+  u.onend = function () { if (tok === speakTok && done) done(); };
+  u.onerror = function () { if (tok === speakTok && done) done(); };
+  window.speechSynthesis.speak(u);
+}
+
+function onQuestionShown() {
+  var q = S.questions[S.idx];
+  var tok = ++speakTok;
+  var after = function () {
+    if (tok !== speakTok || S.screen !== 'question' || S.answered || S.recording) return;
+    if (S.autoRec) startRec();
+  };
+  if (S.autoRead) { setTimeout(function () { if (tok === speakTok) speak(q.text, after); }, 300); }
+  else { after(); }
+}
+
+/* ================= マイク・音声認識 ================= */
+var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+var rec = null, recTimer = null, finTimer = null, finalText = '', interimText = '', lastEvt = 0, pauses = [], stopping = false, finalized = true;
+
 function micErrorMsg(err) {
   var n = err && err.name;
-  if (n === 'NotAllowedError' || n === 'SecurityError' || n === 'PermissionDeniedError') {
-    return 'マイクの使用がブロックされています。アドレスバー左のアイコンから「マイク」を「許可」に変更し、ページを再読み込みしてください。許可できない場合は、文字で回答を入力できます。';
-  }
-  if (n === 'NotFoundError' || n === 'DevicesNotFoundError') return 'マイクが見つかりません。マイクの接続と、Chromeのマイク設定（使用するデバイス）を確認してください。';
+  if (n === 'NotAllowedError' || n === 'SecurityError' || n === 'PermissionDeniedError') return 'マイクの使用がブロックされています。アドレスバー左のアイコンから「マイク」を「許可」に変更し、ページを再読み込みしてください。';
+  if (n === 'NotFoundError' || n === 'DevicesNotFoundError') return 'マイクが見つかりません。接続と、Chromeのマイク設定（使用するデバイス）を確認してください。';
   if (n === 'NotReadableError') return 'マイクを使用できません。他のアプリ（Web会議など）がマイクを使用中でないか確認してください。';
+  if (n === 'Unsupported') return 'このブラウザではマイクを利用できません。Google Chromeをお使いください。';
   return 'マイクを開始できませんでした。文字で回答を入力することもできます。';
 }
-function checkMic() {
-  if (!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) {
-    S.micMsg = 'このブラウザではマイクを利用できません。Google Chromeでお試しください。'; return render();
-  }
-  navigator.mediaDevices.getUserMedia({ audio: true }).then(function (st) {
+function ensureMic() {
+  if (!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) return Promise.reject({ name: 'Unsupported' });
+  return navigator.mediaDevices.getUserMedia({ audio: true }).then(function (st) {
     st.getTracks().forEach(function (t) { t.stop(); });
-    S.micMsg = 'マイクを使用できます。'; render();
-  }).catch(function (err) { S.micMsg = micErrorMsg(err); render(); });
+    S.micOk = true;
+  });
 }
+function checkMic() {
+  ensureMic().then(function () { S.micMsg = 'マイクを使用できます。'; render(); })
+    .catch(function (err) { S.micOk = false; S.micMsg = micErrorMsg(err); render(); });
+}
+
 function startRec() {
-  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  S.transcript = ''; S.secs = 0; S.answered = false; S.error = '';
-  if (!SR) {
-    S.answered = true;
-    S.error = 'このブラウザは音声認識に対応していません（Google Chromeを推奨）。下の欄に文字で回答を入力してください。';
-    render(); return;
-  }
-  var md = navigator.mediaDevices;
-  if (md && md.getUserMedia) {
-    // 先にマイク許可を明示的に求め、拒否・未接続の理由を分かりやすく表示する
-    md.getUserMedia({ audio: true }).then(function (st) {
-      st.getTracks().forEach(function (t) { t.stop(); });
-      beginRec(SR);
-    }).catch(function (err) { S.answered = true; S.error = micErrorMsg(err); render(); });
-  } else { beginRec(SR); }
+  if (!SR) { S.answered = true; S.error = 'このブラウザは音声認識に対応していません（Google Chromeを推奨）。下の欄に文字で回答を入力してください。'; return render(); }
+  stopSpeak();
+  S.transcript = ''; S.stats = null; S.secs = 0; S.answered = false; S.error = '';
+  ensureMic().then(beginRec).catch(function (err) { S.answered = true; S.micOk = false; S.error = micErrorMsg(err); render(); });
 }
-function beginRec(SR) {
+
+function beginRec() {
+  finalText = ''; interimText = ''; pauses = []; stopping = false; finalized = false; lastEvt = Date.now();
   rec = new SR();
   rec.lang = 'ja-JP'; rec.continuous = true; rec.interimResults = true;
-  var finalText = '';
   rec.onresult = function (e) {
-    var interim = '';
+    var now = Date.now();
+    if ((finalText || interimText) && now - lastEvt > 3000) pauses.push((now - lastEvt) / 1000);
+    lastEvt = now; interimText = '';
     for (var i = e.resultIndex; i < e.results.length; i++) {
-      if (e.results[i].isFinal) finalText += e.results[i][0].transcript; else interim += e.results[i][0].transcript;
+      if (e.results[i].isFinal) finalText += e.results[i][0].transcript; else interimText += e.results[i][0].transcript;
     }
-    S.transcript = finalText + interim;
-    var el = $('live'); if (el) { el.textContent = S.transcript || '（話し始めると、ここに文字が表示されます）'; el.scrollTop = el.scrollHeight; }
+    S.transcript = finalText + interimText;
+    var live = $('live'); if (live) { live.textContent = S.transcript || '（話し始めると、ここに文字が表示されます）'; live.scrollTop = live.scrollHeight; }
   };
   rec.onerror = function (e) {
     var msg = '';
     if (e.error === 'not-allowed' || e.error === 'service-not-allowed') msg = micErrorMsg({ name: 'NotAllowedError' });
     else if (e.error === 'audio-capture') msg = micErrorMsg({ name: 'NotFoundError' });
     else if (e.error === 'network') msg = '音声認識サーバーに接続できません。インターネット接続を確認してください（Chromeの音声認識はオンラインで動作します）。';
-    if (msg) { stopRec(); S.error = msg; render(); }
+    if (msg) { S.error = msg; stopping = true; finalize(); }
   };
-  rec.onend = function () { if (S.recording) { try { rec.start(); } catch (_) {} } };
-  try { rec.start(); } catch (_) {}
+  rec.onend = function () {
+    if (S.recording && !stopping) { try { rec.start(); } catch (e) {} }
+    else if (stopping) { finalize(); }
+  };
+  try { rec.start(); } catch (e) {}
   S.recording = true;
-  timer = setInterval(function () { S.secs++; var t = $('timer'); if (t) t.textContent = mmss(S.secs); }, 1000);
-  render();
-}
-function stopRec() {
-  S.recording = false; S.answered = true;
-  clearInterval(timer);
-  if (rec) { try { rec.stop(); } catch (_) {} }
+  clearInterval(recTimer);
+  recTimer = setInterval(function () { S.secs++; var t = $('timer'); if (t) t.textContent = mmss(S.secs); }, 1000);
   render();
 }
 
+function stopRec() {
+  if (!S.recording) return;
+  stopping = true; S.recording = false; S.finalizing = true;
+  clearInterval(recTimer);
+  try { rec.stop(); } catch (e) {}
+  finTimer = setTimeout(finalize, 1500); // onend が来ない場合の保険
+  render();
+}
+
+function finalize() {
+  if (finalized) return;
+  finalized = true;
+  clearTimeout(finTimer); clearInterval(recTimer);
+  S.recording = false; S.finalizing = false; stopping = false;
+  var longest = pauses.reduce(function (a, b) { return Math.max(a, b); }, 0);
+  S.transcript = (finalText + interimText).trim();
+  S.stats = { secs: S.secs, pauses: pauses.length, longestPause: Math.round(longest * 10) / 10 };
+  S.answered = true;
+  if (S.screen === 'question') render();
+}
+
+function abortRec() {
+  if (S.recording || S.finalizing) { stopping = true; finalized = true; try { rec.stop(); } catch (e) {} }
+  clearInterval(recTimer); clearTimeout(finTimer);
+  S.recording = false; S.finalizing = false;
+}
+
 /* ================= アクション ================= */
+function saveLogin() {
+  S.error = '';
+  if (!S.userName.trim() || !S.token.trim()) { S.error = '利用者名と合言葉を入力してください。'; return render(); }
+  S.userName = S.userName.trim(); S.token = S.token.trim();
+  busy('接続を確認しています…');
+  api('status').then(function (st) {
+    store('it_user', S.userName); store('it_token', S.token);
+    S.status = st; S.loginOpen = false; busy(''); render();
+  }).catch(function (e) { busy(''); S.error = e.message; S.loginOpen = true; render(); });
+}
+
 function startSession() {
   var cats = Object.keys(S.cats).filter(function (k) { return S.cats[k]; });
   if (!cats.length) { S.error = '質問のジャンルを1つ以上選んでください。'; return render(); }
   S.error = '';
   busy('質問を生成しています…（10〜20秒ほどかかります）');
-  gs('generateQuestions', {
+  api('generateQuestions', {
     skillText: maskText(S.skillText), projectText: maskText(S.projectText), cats: cats, level: S.level
   }).then(function (qs) {
-    S.questions = qs; S.idx = 0; S.results = []; S.transcript = ''; S.answered = false; S.screen = 'question'; S.saveMsg = '';
-    busy(''); render(); window.scrollTo(0, 0);
+    S.questions = qs; S.idx = 0; S.results = []; S.transcript = ''; S.stats = null; S.answered = false; S.recording = false; S.screen = 'question'; S.saveMsg = '';
+    busy(''); render(); resetScroll(); onQuestionShown();
   }).catch(function (e) { busy(''); S.error = e.message; render(); });
+}
+
+function beginSession() {
+  // 「面談を開始」クリックの直後にマイク許可を求める（初回のみダイアログが出る）
+  if (S.micOk !== true) { ensureMic().catch(function (err) { S.micOk = false; S.micMsg = micErrorMsg(err); }); }
+  startSession();
 }
 
 function evaluate() {
@@ -284,13 +402,18 @@ function evaluate() {
   if (!S.transcript || S.transcript.trim().length < 5) { S.error = '回答が空です。録音するか、文字で回答を入力してください。'; return render(); }
   S.error = '';
   busy('回答を評価しています…');
-  gs('evaluateAnswer', {
+  var an = analyze(S.transcript);
+  api('evaluateAnswer', {
     question: q.text, intent: q.intent, category: q.category, level: S.level,
     transcript: maskText(S.transcript), skillText: maskText(S.skillText)
   }).then(function (fb) {
     S.fb = fb;
-    S.results[S.idx] = { no: q.no, category: q.category, text: q.text, transcript: S.transcript, score: fb.score, axes: fb.axes, good: fb.good, improve: fb.improve, skipped: false };
-    S.screen = 'feedback'; busy(''); render(); window.scrollTo(0, 0);
+    S.results[S.idx] = {
+      no: q.no, category: q.category, text: q.text, transcript: S.transcript, score: fb.score, axes: fb.axes,
+      good: fb.good, improve: fb.improve, skipped: false,
+      fillers: an.s, habits: an.h, speech: { an: an, stats: S.stats }
+    };
+    S.screen = 'feedback'; busy(''); render(); resetScroll();
   }).catch(function (e) { busy(''); S.error = e.message; render(); });
 }
 
@@ -302,10 +425,10 @@ function skip() {
 
 function goNext() {
   S.error = '';
-  if (S.recording) stopRec();
+  stopSpeak(); abortRec();
   if (S.idx >= S.questions.length - 1) { return finish(); }
-  S.idx++; S.transcript = ''; S.answered = false; S.fb = null; S.screen = 'question';
-  render(); window.scrollTo(0, 0);
+  S.idx++; S.transcript = ''; S.stats = null; S.answered = false; S.fb = null; S.screen = 'question';
+  render(); resetScroll(); onQuestionShown();
 }
 
 function summary() {
@@ -315,12 +438,15 @@ function summary() {
 }
 
 function finish() {
-  S.screen = 'result'; S.saveMsg = '履歴を保存しています…'; render(); window.scrollTo(0, 0);
+  S.screen = 'result'; S.saveMsg = '履歴を保存しています…'; render(); resetScroll();
   var sm = summary();
-  gs('saveSession', { engineerName: S.engineerName, level: S.level, total: sm.total, results: S.results })
-    .then(function (r) { S.saveMsg = r.saved ? '結果を履歴シートに保存しました。' : '履歴の保存に失敗しました：' + (r.message || ''); if (S.screen === 'result') render(); })
+  api('saveSession', {
+    engineerName: S.engineerName, level: S.level, total: sm.total,
+    results: S.results.map(function (r) { return { no: r.no, category: r.category, text: r.text, score: r.score, skipped: r.skipped, fillers: r.fillers || 0 }; })
+  }).then(function (r) { S.saveMsg = r.saved ? '結果を履歴シートに保存しました。' : '履歴の保存に失敗しました：' + (r.message || ''); if (S.screen === 'result') render(); })
     .catch(function (e) { S.saveMsg = '履歴の保存に失敗しました：' + e.message; if (S.screen === 'result') render(); });
 }
+function resetScroll() { $('main').scrollTop = 0; }
 
 /* ================= 描画 ================= */
 function render() {
@@ -328,12 +454,14 @@ function render() {
   $('steps').innerHTML = STEPS.map(function (s, i) { return '<div class="step' + (i === cur ? ' on' : '') + '">' + s[1] + '</div>'; }).join('');
   var html = '';
   if (S.error) html += '<div class="err" role="alert">' + esc(S.error) + '</div>';
-  if (S.status && !S.status.hasKey && S.screen === 'setup') {
-    html += '<div class="err" role="alert">GEMINI_API_KEY が未設定です。Apps Script の「プロジェクトの設定 &gt; スクリプト プロパティ」に設定してください。</div>';
-  }
-  html += ({ setup: vSetup, question: vQuestion, feedback: vFeedback, result: vResult })[S.screen]();
-  $('app').innerHTML = html;
+  if (!API_OK && S.screen === 'setup') html += '<div class="err" role="alert">API_URL が未設定です。index.html の API_URL に、GASをデプロイして発行された「/exec」のURLを設定してください。</div>';
+  if (S.status && !S.status.hasKey && S.screen === 'setup') html += '<div class="err" role="alert">GEMINI_API_KEY が未設定です。Apps Script の「プロジェクトの設定 &gt; スクリプト プロパティ」に設定してください。</div>';
+  var v = ({ setup: vSetup, question: vQuestion, feedback: vFeedback, result: vResult })[S.screen]();
+  $('app').innerHTML = html + v.main;
+  $('barin').innerHTML = v.bar;
 }
+
+function needLogin() { return !S.token || !S.userName || S.loginOpen; }
 
 function vSetup() {
   var catBtns = Object.keys(CATS).map(function (k) {
@@ -342,85 +470,138 @@ function vSetup() {
   var lvBtns = LEVELS.map(function (l) {
     return '<button class="' + (S.level === l[0] ? 'on' : '') + '" data-act="lv" data-k="' + l[0] + '" aria-pressed="' + (S.level === l[0]) + '">' + l[1] + '</button>';
   }).join('');
-  var ready = S.skillText.trim().length >= 30;
+  var login = needLogin();
+  var ready = !login && S.skillText.trim().length >= 30;
   var sum = '案件詳細：' + (S.projectText.trim() ? '入力済み' : '未入力') + '　／　個人情報マスク：' + (S.mask ? 'ON' : 'OFF');
 
-  var drop = '<div class="drop h' + (S.skillFile ? ' has' : '') + '" id="drop">' +
-    '<div class="info">' + (S.skillFile
+  var loginCard = '';
+  if (login) {
+    loginCard = '<div class="card"><h2>利用者の登録（初回のみ）</h2><p class="note">利用者名と、社内で共有されている合言葉を入力してください。この端末のブラウザに保存されます。</p>' +
+      '<div class="login"><div><label class="lb" for="un">利用者名</label><input type="text" id="un" data-bind="userName" value="' + esc(S.userName) + '" placeholder="例：山田" autocomplete="off"></div>' +
+      '<div><label class="lb" for="tk">合言葉</label><input type="password" id="tk" data-bind="token" value="' + esc(S.token) + '" autocomplete="off"></div>' +
+      '<button class="btn" data-act="login" style="min-height:44px">保存して接続</button></div></div>';
+  }
+
+  var drop = '<div class="drop' + (S.skillFile ? ' has' : '') + '" id="drop"><div class="info">' + (S.skillFile
       ? '<b>' + esc(S.skillFile) + '</b><span class="note">' + esc(S.skillInfo) + '</span>'
       : '<b>スキルシートのExcelを選択</b><span class="note">.xlsx / .xls をここにドロップ、または右のボタンで選択（ファイルは外部に保存されません）</span>') + '</div>' +
-    '<button class="btn sub" data-act="pick">' + (S.skillFile ? '別のファイルを選ぶ' : 'Excelファイルを選択') + '</button>' +
+    '<button class="btn ghost" data-act="pick">' + (S.skillFile ? '別のファイルを選ぶ' : 'Excelファイルを選択') + '</button>' +
     '<input type="file" id="file" accept=".xlsx,.xls" style="display:none"></div>';
 
   var optBody = '';
   if (S.optOpen) {
-    optBody = '<div class="opts-body">' +
-      '<div><label class="lb" for="pj">案件詳細（提案先の案件内容を貼り付けると、案件に合わせた質問が混ざります）</label>' +
+    optBody = '<div class="opts-body"><div><label class="lb" for="pj">案件詳細（貼り付けると、案件に合わせた質問が混ざります）</label>' +
       '<textarea id="pj" rows="5" data-bind="projectText" placeholder="例：ECサイト基盤のリニューアル。Java 17 / Spring Boot / AWS。要件定義後半から参画…">' + esc(S.projectText) + '</textarea></div>' +
-      '<div style="display:flex;flex-direction:column;gap:10px">' +
-      '<div><label class="lb" for="nm">エンジニア名（履歴用）</label><input type="text" id="nm" data-bind="engineerName" value="' + esc(S.engineerName) + '" placeholder="例：山田"></div>' +
+      '<div class="stack" style="gap:10px"><div><label class="lb" for="nm">エンジニア名（履歴用）</label><input type="text" id="nm" data-bind="engineerName" value="' + esc(S.engineerName) + '" placeholder="例：山田"></div>' +
       '<label class="chk"><input type="checkbox" id="mk"' + (S.mask ? ' checked' : '') + ' data-act="mask"><span>AIに送る前に個人情報を伏せる（メール・電話・URL・郵便番号＋下記の語句）</span></label>' +
       '<div><label class="lb" for="mw">伏せたい語句（氏名・会社名など。読点区切り）</label><input type="text" id="mw" data-bind="maskWords" value="' + esc(S.maskWords) + '" placeholder="例：山田太郎、株式会社○○"></div>' +
+      '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span class="small">利用者：' + esc(S.userName || '未登録') + '</span><button class="btn ghost min" data-act="relogin">利用者名・合言葉を変更</button></div>' +
       '<p class="small">無料枠のGemini APIでは、送信内容が品質改善に利用される場合があります。</p></div></div>';
   }
 
-  return '<div style="max-width:960px;margin:0 auto">' +
+  var micChip = S.micOk === true ? '<span class="small" style="color:var(--good);font-weight:700">マイク：使用できます</span>' : (S.micOk === false ? '<span class="small" style="color:#7A1A14;font-weight:700">マイク：使用できません</span>' : '<span class="small">マイク：未確認</span>');
+
+  var main = '<div class="stack">' + loginCard +
     '<div class="card"><h2>1. スキルシート（Excel）</h2>' + drop + '</div>' +
-    '<div class="card"><div class="cols2">' +
-      '<div><h2 style="margin-bottom:10px">2. 質問のジャンル（複数選択）</h2><div class="grid2">' + catBtns + '</div></div>' +
-      '<div style="display:flex;flex-direction:column;gap:10px"><h2>3. 想定レベル</h2><div class="seg">' + lvBtns + '</div>' +
-      '<p class="note">10問（毎回ランダム）／音声で回答／1問あたり90秒が目安</p>' +
-      '<div><button class="btn sub" style="min-height:40px;padding:0 16px;font-size:14px" data-act="mic">マイクを確認する</button>' +
-      (S.micMsg ? '<p class="note" style="margin-top:6px" role="status">' + esc(S.micMsg) + '</p>' : '') + '</div></div>' +
-    '</div></div>' +
+    '<div class="g2">' +
+      '<div class="card"><h2>2. 質問のジャンル（複数選択）</h2><div class="grid2">' + catBtns + '</div></div>' +
+      '<div class="card"><h2>3. 想定レベルと録音の準備</h2><div class="seg">' + lvBtns + '</div>' +
+        '<p class="note">' + LEVEL_DESC[S.level] + '</p>' +
+        '<label class="chk"><input type="checkbox" data-act="autoRead"' + (S.autoRead ? ' checked' : '') + '><span>質問を自動で読み上げる</span></label>' +
+        '<label class="chk"><input type="checkbox" data-act="autoRec"' + (S.autoRec ? ' checked' : '') + '><span>読み上げ後に自動で録音を始める</span></label>' +
+        '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><button class="btn ghost min" data-act="mic">マイクを確認する</button>' + micChip + '</div>' +
+        (S.micMsg && S.micOk === false ? '<p class="note" role="status">' + esc(S.micMsg) + '</p>' : '') + '</div>' +
+    '</div>' +
     '<div class="card"><button class="acc" data-act="opt" aria-expanded="' + S.optOpen + '"><span>オプション設定（任意）　<span class="sum">' + esc(sum) + '</span></span><span aria-hidden="true">' + (S.optOpen ? '▲' : '▼') + '</span></button>' + optBody + '</div>' +
-    '<button class="btn full" data-act="start"' + (ready ? '' : ' disabled') + '>' + (ready ? '面談を開始する' : 'Excelを取り込むと開始できます') + '</button></div>';
+    '</div>';
+
+  var hint = login ? '利用者名と合言葉を登録してください。' : (ready ? '準備ができました。「面談を開始する」を押してください。' : 'スキルシートのExcelを取り込むと開始できます。');
+  var bar = '<span class="small grow">' + hint + '</span><button class="btn" data-act="start"' + (ready ? '' : ' disabled') + '>面談を開始する</button>';
+  return { main: main, bar: bar };
 }
 
 function vQuestion() {
   var q = S.questions[S.idx];
   var bars = '';
   for (var i = 0; i < 24; i++) bars += '<i style="height:' + (10 + (i * 37) % 26) + 'px;animation-delay:' + ((i % 8) * 0.1) + 's"></i>';
-  var label = S.recording ? '録音中…　話し終えたら停止してください' : (S.answered ? '回答を確認してください（誤変換は直接修正できます）' : 'マイクボタンを押して回答を始めてください');
+  var label = S.recording ? '録音中…　話し終えたら「録音を停止」を押してください' : (S.finalizing ? '文字起こしを確定しています…' : (S.answered ? '回答を確認してください（誤変換は直接修正できます）' : '「録音を開始」を押して回答してください'));
+
   var body = '';
   if (S.recording) {
-    body = '<button class="btn rec big" data-act="stop"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>録音を停止</button>' +
-      '<div class="small">経過 <span id="timer">' + mmss(S.secs) + '</span> ／ 目安 01:30</div>' +
-      '<div class="tbox livebox" id="live" aria-live="polite">' + esc(S.transcript || '（話し始めると、ここに文字が表示されます）') + '</div>';
+    body = '<div class="small">経過 <span id="timer">' + mmss(S.secs) + '</span> ／ 目安 01:30</div>' +
+      '<div class="tbox" id="live" aria-live="polite">' + esc(S.transcript || '（話し始めると、ここに文字が表示されます）') + '</div>';
+  } else if (S.finalizing) {
+    body = '<div class="tbox">' + esc(S.transcript) + '</div>';
   } else if (S.answered) {
-    body = '<textarea id="tx" rows="5" data-bind="transcript" aria-label="あなたの回答（文字起こし）" placeholder="回答を入力してください">' + esc(S.transcript) + '</textarea>' +
-      '<div class="actions" style="width:100%"><button class="btn sub" data-act="rec">録り直す</button><button class="btn" data-act="eval">回答を評価する</button></div>';
+    body = '<textarea id="tx" rows="6" data-bind="transcript" aria-label="あなたの回答（文字起こし）" placeholder="回答を入力してください" style="width:100%">' + esc(S.transcript) + '</textarea>';
   } else {
-    body = '<button class="btn big" data-act="rec"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg>録音を開始</button>' +
-      '<button class="btn text" data-act="typeonly">文字で回答する</button>';
+    body = '<div class="tbox" style="color:var(--muted)">（回答の文字起こしがここに表示されます）</div>';
   }
-  return '<div style="max-width:1040px;margin:0 auto">' +
-    '<div class="prog"><b style="font-size:14px;white-space:nowrap">' + q.no + ' / ' + S.questions.length + ' 問</b><div class="bar"><div style="width:' + (q.no / S.questions.length * 100) + '%"></div></div>' +
-    '<button class="btn text" data-act="skip" style="white-space:nowrap">スキップ</button></div>' +
-    '<div class="qgrid">' +
-    '<div class="card" style="padding:24px;justify-content:center"><div><span class="tag">' + esc((CATS[q.category] || {}).label || '') + '</span></div>' +
+
+  var main = '<div class="prog"><b>' + q.no + ' / ' + S.questions.length + ' 問</b><div class="bar"><div style="width:' + (q.no / S.questions.length * 100) + '%"></div></div></div>' +
+    '<div class="g2">' +
+    '<div class="card" style="padding:24px;justify-content:center;gap:14px"><div><span class="tag">' + esc((CATS[q.category] || {}).label || '') + '</span></div>' +
     '<p class="qtext">' + esc(q.text) + '</p><p class="note">目安：結論から話し、具体例を1つ入れて、90秒以内にまとめましょう。</p></div>' +
     '<div class="card center"><div class="wave' + (S.recording ? ' on' : '') + '" aria-hidden="true">' + bars + '</div>' +
-    '<div style="font-size:14px;font-weight:500;text-align:center">' + label + '</div>' + body + '</div>' +
-    '</div></div>';
+    '<div style="font-size:14px;font-weight:500">' + label + '</div>' + body + '</div></div>';
+
+  var spk = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a9 9 0 0 1 0 14"/></svg>';
+  var bar = '<button class="btn ghost" data-act="skip"' + (S.finalizing ? ' disabled' : '') + '>スキップ</button><button class="btn ghost" data-act="speak">' + spk + '質問を読み上げ</button><span class="grow"></span>';
+  if (S.recording) {
+    bar += '<button class="btn rec" data-act="stop">■ 録音を停止</button>';
+  } else if (S.finalizing) {
+    bar += '<button class="btn" disabled>確定中…</button>';
+  } else if (S.answered) {
+    bar += '<button class="btn ghost" data-act="rec">録り直す</button><button class="btn" data-act="eval">回答を評価する</button>';
+  } else {
+    bar += '<button class="btn plain" data-act="typeonly">文字で回答する</button><button class="btn" data-act="rec">● 録音を開始</button>';
+  }
+  return { main: main, bar: bar };
 }
 
 function vFeedback() {
-  var q = S.questions[S.idx], fb = S.fb;
+  var q = S.questions[S.idx], fb = S.fb, r = S.results[S.idx], sp = r.speech;
   var axes = AXES.map(function (a) {
     return '<div class="axis"><div><span>' + a[1] + '</span><b>' + fb.axes[a[0]] + ' / 5</b></div><div class="bar"><div style="width:' + (fb.axes[a[0]] * 20) + '%"></div></div></div>';
   }).join('');
-  return '<div class="row"><div class="col-main" style="flex:1 1 420px">' +
-    '<div class="card"><div style="display:flex;gap:12px;align-items:center"><span class="tag">' + esc((CATS[q.category] || {}).label || '') + '</span><span class="note">' + q.no + ' / ' + S.questions.length + ' 問</span></div>' +
-    '<div style="font-size:17px;font-weight:700;line-height:1.6">' + esc(q.text) + '</div>' +
-    '<div class="small" style="font-weight:700;margin-top:4px">あなたの回答（文字起こし）</div><div class="scroll" style="max-height:130px;font-size:14px;line-height:1.8;white-space:pre-wrap">' + esc(S.transcript) + '</div></div>' +
-    '<div class="fb-model"><h3>回答の組み立て例</h3><p>' + esc(fb.model) + '</p></div>' +
-    '</div><div class="col-side" style="flex:1 1 380px">' +
-    '<div class="card"><div class="split"><b style="font-size:14px">この回答の評価</b><span class="score">' + fb.score + '</span><span class="note">/ 100</span></div><div class="ax2">' + axes + '</div></div>' +
-    '<div class="fb-good" style="margin-bottom:14px"><h3>良かった点</h3><p>' + esc(fb.good) + '</p></div>' +
-    '<div class="fb-warn" style="margin-bottom:14px"><h3>改善ポイント</h3><p>' + esc(fb.improve) + '</p></div>' +
-    '<button class="btn full" data-act="next">' + (S.idx >= S.questions.length - 1 ? '結果を見る' : '次の質問へ') + '</button>' +
+
+  // 話し方（フィラー・話速・間）
+  var an = sp.an, st = sp.stats, speechHtml = '<h2>話し方のチェック</h2><div class="chips">';
+  speechHtml += '<div class="stat"><b>' + an.s + '回</b>フィラー</div>';
+  speechHtml += '<div class="stat"><b>' + an.h + '回</b>口癖の候補</div>';
+  if (st && st.secs >= 10) {
+    var pace = Math.round(an.chars / (st.secs / 60));
+    speechHtml += '<div class="stat"><b>' + pace + '文字/分</b>話速（目安250〜350）</div>';
+    speechHtml += '<div class="stat"><b>' + st.pauses + '回</b>3秒以上の間</div>';
+    speechHtml += '<div class="stat"><b>' + mmss(st.secs) + '</b>回答時間（目安1:30）</div>';
+  }
+  speechHtml += '</div>';
+  var adv = [];
+  if (an.s > 0) adv.push('フィラー（' + listCounts(an.strong) + '）が出ています。言葉に詰まったら、言い淀まずに一呼吸おくと落ち着いて聞こえます。');
+  if (an.h > 0) adv.push('口癖の候補（' + listCounts(an.habit) + '）があります。多用すると自信がない印象になるため、必要な場面だけに絞りましょう。');
+  if (st && st.secs >= 10) {
+    var p2 = Math.round(an.chars / (st.secs / 60));
+    if (p2 > 380) adv.push('話すスピードがやや速めです。要点ごとに間を置くと、聞き手が理解しやすくなります。');
+    if (p2 < 200) adv.push('話すスピードがゆっくりめです。結論を先に言い切ると、テンポが良くなります。');
+    if (st.pauses >= 2) adv.push('3秒以上の間が' + st.pauses + '回ありました。話す順番（結論→理由→例）を決めておくと、間が減ります。');
+    if (st.secs > 120) adv.push('回答が長めです。90秒以内に収まるよう、要点を2〜3個に絞りましょう。');
+  }
+  if (!adv.length) adv.push('フィラーや話し方の大きな問題は見つかりませんでした。');
+  speechHtml += '<p class="note">' + adv.join('<br>') + '</p>' +
+    '<p class="small">Chromeの音声認識は言い淀みを自動で省くことがあり、実際より少なく表示される場合があります。<mark class="m1">濃い色</mark>＝フィラー、<mark class="m2">薄い色</mark>＝口癖の候補です。</p>';
+
+  var main = '<div class="g2"><div class="col">' +
+    '<div class="card fill"><div style="display:flex;gap:12px;align-items:center"><span class="tag">' + esc((CATS[q.category] || {}).label || '') + '</span><span class="note">' + q.no + ' / ' + S.questions.length + ' 問</span></div>' +
+    '<div style="font-size:16px;font-weight:700;line-height:1.6">' + esc(q.text) + '</div>' +
+    '<div class="small" style="font-weight:700">あなたの回答（文字起こし）</div><div class="scroll" style="max-height:200px;font-size:14px;line-height:1.9;white-space:pre-wrap">' + highlight(S.transcript) + '</div></div>' +
+    '<div class="card model"><h2>回答の組み立て例</h2><p>' + esc(fb.model) + '</p></div></div>' +
+    '<div class="col">' +
+    '<div class="card"><div class="split"><b style="font-size:15px">この回答の評価</b><span class="score">' + fb.score + '</span><span class="note">/ 100</span></div><div class="ax2">' + axes + '</div></div>' +
+    '<div class="card fill"><div class="sec good"><h3>良かった点</h3><p>' + esc(fb.good) + '</p></div><div class="sec warn"><h3>改善ポイント</h3><p>' + esc(fb.improve) + '</p></div></div>' +
+    '<div class="card">' + speechHtml + '</div>' +
     '</div></div>';
+  var bar = '<span class="grow"></span><button class="btn" data-act="next">' + (S.idx >= S.questions.length - 1 ? '結果を見る' : '次の質問へ') + '</button>';
+  return { main: main, bar: bar };
 }
 
 function vResult() {
@@ -431,21 +612,31 @@ function vResult() {
     var avg = Math.round(byCat[k].reduce(function (a, b) { return a + b; }, 0) / byCat[k].length);
     return '<div class="axis"><div><span>' + (CATS[k] ? CATS[k].label : k) + '（' + byCat[k].length + '問）</span><b>' + avg + '</b></div><div class="bar t"><div class="' + (avg < 65 ? 'low' : '') + '" style="width:' + avg + '%"></div></div></div>';
   }).join('');
+
   var axAvg = AXES.map(function (a) {
     var v = sm.valid.map(function (r) { return r.axes[a[0]]; });
     return { k: a[0], avg: v.length ? v.reduce(function (x, y) { return x + y; }, 0) / v.length : 5 };
-  }).sort(function (a, b) { return a.avg - b.avg; }).slice(0, 3);
-  var tips = axAvg.map(function (a) { return '<div><b>' + TIPS[a.k][0] + '（平均 ' + a.avg.toFixed(1) + ' / 5）</b>' + TIPS[a.k][1] + '</div>'; }).join('');
+  }).sort(function (a, b) { return a.avg - b.avg; });
+  var tips = axAvg.slice(0, 2).map(function (a) { return '<div class="tip"><b>' + TIPS[a.k][0] + '（平均 ' + a.avg.toFixed(1) + ' / 5）</b>' + TIPS[a.k][1] + '</div>'; });
+  var fTotal = 0, mins = 0;
+  sm.valid.forEach(function (r) { fTotal += r.fillers || 0; if (r.speech && r.speech.stats) mins += r.speech.stats.secs / 60; });
+  if (sm.valid.length && (fTotal >= 5 || (mins > 0 && fTotal / mins >= 3))) {
+    tips.push('<div class="tip"><b>フィラーを減らす（全体で' + fTotal + '回）</b>「えー」「あのー」が目立ちます。言い淀みそうなときは、一呼吸おいてから話し始めましょう。</div>');
+  } else if (tips.length < 3 && axAvg[2]) {
+    tips.push('<div class="tip"><b>' + TIPS[axAvg[2].k][0] + '（平均 ' + axAvg[2].avg.toFixed(1) + ' / 5）</b>' + TIPS[axAvg[2].k][1] + '</div>');
+  }
   var rows = S.results.map(function (r) {
-    return '<div class="tbl-row"><span class="small" style="width:24px">' + r.no + '</span><span class="tag">' + esc((CATS[r.category] || {}).label || '') + '</span><span class="tx">' + esc(r.text) + '</span><b style="color:var(--accent-d);font-size:15px">' + (r.skipped ? 'スキップ' : r.score) + '</b></div>';
+    return '<div class="tbl-row"><span class="small" style="width:22px">' + r.no + '</span><span class="tag">' + esc((CATS[r.category] || {}).label || '') + '</span><span class="tx">' + esc(r.text) + '</span><b style="color:var(--accent-d);font-size:15px">' + (r.skipped ? 'スキップ' : r.score) + '</b></div>';
   }).join('');
-  return '<div class="row" style="align-items:stretch">' +
-    '<div class="card" style="flex:1 1 240px;justify-content:center"><b style="font-size:14px">総合スコア</b><div class="split"><span class="big-score">' + sm.total + '</span><span class="note">/ 100</span></div><p class="note">回答した' + sm.valid.length + '問の平均です。</p></div>' +
-    '<div class="card" style="flex:2 1 400px"><b style="font-size:14px">ジャンル別スコア</b>' + (cats || '<p class="note">回答がありません。</p>') + '</div></div>' +
-    '<div class="row" style="align-items:stretch">' +
-    '<div class="card" style="flex:1 1 320px"><b style="font-size:14px">次回に向けた重点ポイント</b>' + (sm.valid.length ? '<div class="tips tips1">' + tips + '</div>' : '<p class="note">回答がありません。</p>') + '</div>' +
-    '<div class="card" style="flex:2 1 420px"><b style="font-size:14px">各質問の結果</b><div class="scroll">' + rows + '</div></div></div>' +
-    '<div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center"><button class="btn" data-act="restart">新しい10問で練習する</button><button class="btn sub" data-act="back">設定に戻る</button><span class="small">' + esc(S.saveMsg) + '</span></div>';
+
+  var main = '<div class="g2"><div class="col">' +
+    '<div class="card"><b style="font-size:15px">総合スコア</b><div class="split"><span class="big-score">' + sm.total + '</span><span class="note">/ 100</span></div><p class="note">回答した' + sm.valid.length + '問の平均です。</p></div>' +
+    '<div class="card fill"><h2>ジャンル別スコア</h2>' + (cats || '<p class="note">回答がありません。</p>') + '</div></div>' +
+    '<div class="col">' +
+    '<div class="card"><h2>次回に向けた重点ポイント</h2>' + (sm.valid.length ? tips.join('') : '<p class="note">回答がありません。</p>') + '</div>' +
+    '<div class="card fill"><h2>各質問の結果</h2><div class="scroll" style="max-height:210px">' + rows + '</div></div></div></div>';
+  var bar = '<span class="small grow">' + esc(S.saveMsg) + '</span><button class="btn ghost" data-act="back">設定に戻る</button><button class="btn" data-act="restart">新しい10問で練習する</button>';
+  return { main: main, bar: bar };
 }
 
 /* ================= イベント ================= */
@@ -456,23 +647,32 @@ document.addEventListener('click', function (e) {
   else if (a === 'lv') { S.level = k; render(); }
   else if (a === 'pick') { $('file').click(); }
   else if (a === 'opt') { S.optOpen = !S.optOpen; render(); }
+  else if (a === 'login') { saveLogin(); }
+  else if (a === 'relogin') { S.loginOpen = true; render(); }
   else if (a === 'mic') { checkMic(); }
-  else if (a === 'start' || a === 'restart') { startSession(); }
-  else if (a === 'back') { S.screen = 'setup'; S.error = ''; render(); }
+  else if (a === 'start' || a === 'restart') { beginSession(); }
+  else if (a === 'back') { stopSpeak(); abortRec(); S.screen = 'setup'; S.error = ''; render(); }
   else if (a === 'rec') { startRec(); }
   else if (a === 'stop') { stopRec(); }
-  else if (a === 'typeonly') { S.answered = true; S.transcript = ''; render(); var tx = $('tx'); if (tx) tx.focus(); }
+  else if (a === 'speak') { speak(S.questions[S.idx].text); }
+  else if (a === 'typeonly') { stopSpeak(); S.answered = true; S.transcript = ''; S.stats = null; render(); var tx = $('tx'); if (tx) tx.focus(); }
   else if (a === 'eval') { evaluate(); }
   else if (a === 'skip') { skip(); }
   else if (a === 'next') { goNext(); }
 });
 document.addEventListener('change', function (e) {
   if (e.target.id === 'file' && e.target.files[0]) readExcel(e.target.files[0]);
-  if (e.target.getAttribute && e.target.getAttribute('data-act') === 'mask') S.mask = e.target.checked;
+  var act = e.target.getAttribute && e.target.getAttribute('data-act');
+  if (act === 'mask') { S.mask = e.target.checked; }
+  if (act === 'autoRead') { S.autoRead = e.target.checked; }
+  if (act === 'autoRec') { S.autoRec = e.target.checked; }
 });
 document.addEventListener('input', function (e) {
   var b = e.target.getAttribute && e.target.getAttribute('data-bind');
-  if (b) { S[b] = e.target.value; if (b === 'skillText') { var btn = document.querySelector('[data-act=start]'); if (btn) btn.disabled = S.skillText.trim().length < 30; } }
+  if (b) S[b] = e.target.value;
+});
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Enter' && (e.target.id === 'un' || e.target.id === 'tk')) saveLogin();
 });
 document.addEventListener('dragover', function (e) { if (e.target.closest && e.target.closest('#drop')) e.preventDefault(); });
 document.addEventListener('drop', function (e) {
@@ -482,10 +682,20 @@ document.addEventListener('drop', function (e) {
     if (f && /\.(xlsx|xls)$/i.test(f.name)) readExcel(f); else { S.error = 'Excelファイル（.xlsx / .xls）を選択してください。'; render(); }
   }
 });
+window.addEventListener('beforeunload', function () { stopSpeak(); });
 
 /* ================= 起動 ================= */
+if ('speechSynthesis' in window) { try { window.speechSynthesis.getVoices(); } catch (e) {} }
+S.userName = load('it_user'); S.token = load('it_token');
 render();
-gs('getStatus').then(function (st) { S.status = st; if (S.screen === 'setup') render(); }).catch(function () {});
+if (S.token && S.userName && API_OK) {
+  api('status').then(function (st) { S.status = st; if (S.screen === 'setup') render(); })
+    .catch(function (e) {
+      // 合言葉が変更されていた場合などは、再登録を促す
+      S.error = e.message; if (/合言葉/.test(e.message)) { S.token = ''; store('it_token', null); S.loginOpen = true; }
+      if (S.screen === 'setup') render();
+    });
+}
 </script>
 </body>
 </html>
